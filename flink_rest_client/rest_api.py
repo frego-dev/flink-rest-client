@@ -3,6 +3,8 @@ cluster
 config
 dataset
 """
+
+import os
 import requests
 
 
@@ -18,19 +20,171 @@ class FlinkRestClientV1:
         self.host = host
         self.port = port
 
+    def delete_cluster(self):
+        """
+        Shuts down the cluster.
+
+        Returns
+        -------
+
+        """
+        return self._execute_rest_request(url='/cluster', http_method='DELETE')
+
     def get_config(self):
+        """
+        Returns the configuration of the WebUI.
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
         return self._execute_rest_request(url='/config', http_method='GET')
 
+    def get_datasets(self):
+        """
+        Returns all cluster data sets.
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
+        return self._execute_rest_request(url='/datasets', http_method='GET')
+
+    def delete_dataset(self, dataset_id):
+        """
+        Triggers the deletion of a cluster data set. This async operation would return a 'triggerid' for further query
+        identifier.
+
+        Parameters
+        ----------
+        dataset_id: str
+             32-character hexadecimal string value that identifies a cluster data set.
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
+        return self._execute_rest_request(url=f'/datasets/{dataset_id}', http_method='DELETE',
+                                          accepted_status_code=202)
+
+    def get_delete_dataset_status(self, trigger_id):
+        """
+        Returns the status for the delete operation of a cluster data set.
+
+        Parameters
+        ----------
+        trigger_id: str
+            32-character hexadecimal string that identifies an asynchronous operation trigger ID. The ID was returned
+            then the operation was triggered.
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
+        return self._execute_rest_request(url=f'/datasets/delete/{trigger_id}', http_method='GET')
+
     def get_jars(self):
+        """
+        Returns a list of all jars previously uploaded via '/jars/upload'.
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
         return self._execute_rest_request(url='/jars', http_method='GET')
 
     def upload_jar(self, path_to_jar):
-        # TODO: finish the file uploading
-        return self._execute_rest_request(url='/jars/upload', http_method='POST')
+        """
+        Uploads a jar to the cluster.
 
-    def _execute_rest_request(self, url, http_method):
-        response = requests.request(method=http_method, url=f'http://{self.host}:/v1{self.port}{url}')
-        if response.status_code == 200:
+        Parameters
+        ----------
+        path_to_jar: str
+            Filepath to the jar file to upload.
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
+        filename = os.path.basename(path_to_jar)
+        files = {
+            'file': (filename, (open(path_to_jar, 'rb')), 'application/x-java-archive')
+        }
+        return self._execute_rest_request(url='/jars/upload', http_method='POST', files=files)
+
+    def upload_maven_jar(self):
+        """
+
+        Returns
+        -------
+
+        """
+        # TODO
+
+    def get_jar_plan(self, jar_id):
+        """
+        Returns the dataflow plan of a job contained in a jar previously uploaded via '/jars/upload'. Program arguments
+        can be passed both via the JSON request (recommended) or query parameters.
+
+        Parameters
+        ----------
+        jar_id: str
+            String value that identifies a jar. When uploading the jar a path is returned, where the filename is the ID.
+            This value is equivalent to the `id` field in the list of uploaded jars (/jars).
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
+        # TODO: add optional params. The REST API has 2 end-point for handling this request. check which one should be
+        #  used.
+        return self._execute_rest_request(url=f'/jars/{jar_id}/plan', http_method='GET')
+
+    def run_jar(self, jar_id):
+        """
+
+        Parameters
+        ----------
+        jar_id
+
+        Returns
+        -------
+
+        """
+        # TODO
+
+    def delete_jar(self, jar_id):
+        """
+        Deletes a jar previously uploaded via '/jars/upload'.
+
+        Parameters
+        ----------
+        jar_id: str
+            String value that identifies a jar. When uploading the jar a path is returned, where the filename is the ID.
+            This value is equivalent to the `id` field in the list of uploaded jars (/jars).
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
+        return self._execute_rest_request(url=f'/jars/{jar_id}', http_method='DELETE')
+
+    def _execute_rest_request(self, url, http_method, accepted_status_code=None, files=None):
+
+        # If accepted_status_code is None then default value is set.
+        if accepted_status_code is None:
+            accepted_status_code = 200
+
+        response = requests.request(method=http_method, url=f'http://{self.host}:/v1{self.port}{url}', files=files)
+        if response.status_code == accepted_status_code:
             return response.json()
         else:
             raise RestException(f"REST response error: {response.status_code}")
