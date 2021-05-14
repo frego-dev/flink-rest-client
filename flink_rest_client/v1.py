@@ -14,11 +14,206 @@ class RestException(Exception):
         super().__init__(*args)
 
 
+def _execute_rest_request(url, http_method=None, accepted_status_code=None, files=None, params=None, data=None):
+
+    if http_method is None:
+        http_method = 'GET'
+    if params is None:
+        params = {}
+    if data is None:
+        data = {}
+
+    # If accepted_status_code is None then default value is set.
+    if accepted_status_code is None:
+        accepted_status_code = 200
+
+    response = requests.request(method=http_method, url=url, files=files, params=params, data=data)
+    if response.status_code == accepted_status_code:
+        return response.json()
+    else:
+        raise RestException(f"REST response error: {response.status_code}")
+
+
+class TaskManagersClient:
+    def __init__(self, prefix):
+        """
+        Constructor.
+
+        Parameters
+        ----------
+        prefix: str
+            REST API url prefix. It must contain the host, port pair.
+        """
+        self.prefix = f'{prefix}/taskmanagers'
+
+    def all(self):
+        """
+        Returns an overview over all task managers.
+
+        Returns
+        -------
+        list
+            List of taskmanagers. Each taskmanager is represented by a dictionary.
+        """
+        return _execute_rest_request(url=self.prefix)['taskmanagers']
+
+    def taskmanager_ids(self):
+        """
+        Returns the list of taskmanager_ids.
+
+        Returns
+        -------
+        list
+            List of taskmanager ids.
+        """
+        return [elem['id'] for elem in self.all()]
+
+    def metric_names(self):
+        """
+        Return the support metric names.
+
+        Returns
+        -------
+        list
+            List of metric names.
+        """
+        return [elem['id'] for elem in _execute_rest_request(url=f'{self.prefix}/metrics')]
+
+    def metrics(self, metric_names=None, agg_modes=None, taskmanager_ids=None):
+        """
+        Provides access to aggregated task manager metrics.
+
+        By default it returns with all existing metric names.
+
+        Parameters
+        ----------
+        metric_names: list
+            (optional) List of selected specific metric names. Default: <all metrics>
+
+        agg_modes: list
+            (optional) List of aggregation modes which should be calculated. Available aggregations are: "min, max,
+            sum, avg". Default: <all modes>
+
+        taskmanager_ids: list
+            List of 32-character hexadecimal strings to select specific task managers. Default: <all taskmanagers>
+
+        Returns
+        -------
+        dict
+            Key-value pairs of metrics.
+        """
+
+        if metric_names is None:
+            metric_names = self.metric_names()
+
+        supported_agg_modes = ['min', 'max', 'sum', 'avg']
+        if agg_modes is None:
+            agg_modes = supported_agg_modes
+        if len(set(agg_modes).difference(set(supported_agg_modes))) > 0:
+            raise RestException(f"The provided aggregation modes list contains invalid value. Supported aggregation "
+                                f"modes: {','.join(supported_agg_modes)}; given list: {','.join(agg_modes)}")
+
+        if taskmanager_ids is None:
+            taskmanager_ids = self.taskmanager_ids()
+
+        params = {
+            'get': ','.join(metric_names),
+            'agg': ','.join(agg_modes),
+            'taskmanagers': ','.join(taskmanager_ids)
+        }
+        query_result = _execute_rest_request(url=f'{self.prefix}/metrics', params=params)
+
+        result = {}
+        for elem in query_result:
+            metric_name = elem.pop('id')
+            result[metric_name] = elem
+
+        return result
+
+    def get(self, taskmanager_id):
+        """
+        Returns details for a task manager.
+
+        Parameters
+        ----------
+        taskmanager_id: str
+            32-character hexadecimal string that identifies a task manager.
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
+        return _execute_rest_request(url=f'{self.prefix}/{taskmanager_id}')
+
+    def get_logs(self, taskmanager_id):
+        """
+        Returns the list of log files on a TaskManager.
+
+        Parameters
+        ----------
+        taskmanager_id: str
+            32-character hexadecimal string that identifies a task manager.
+
+        Returns
+        -------
+        list
+            List of log files in which each element contains a name and size fields.
+        """
+        return _execute_rest_request(url=f'{self.prefix}/{taskmanager_id}/logs')['logs']
+
+    def get_metrics(self, taskmanager_id, metric_names=None):
+        """
+        Provides access to task manager metrics.
+
+        Parameters
+        ----------
+        taskmanager_id: str
+            32-character hexadecimal string that identifies a task manager.
+
+        metric_names: list
+            (optional) List of selected specific metric names. Default: <all metrics>
+
+        Returns
+        -------
+        dict
+            Metric name -> Metric value key-value pairs. The values are provided as strings.
+        """
+
+        if metric_names is None:
+            metric_names = self.metric_names()
+        params = {'get': ','.join(metric_names)}
+
+        query_result = _execute_rest_request(url=f'{self.prefix}/{taskmanager_id}/metrics', params=params)
+        return dict([(elem['id'], elem['value']) for elem in query_result])
+
+    def get_thread_dump(self, taskmanager_id):
+        """
+        Returns the thread dump of the requested TaskManager.
+
+        Parameters
+        ----------
+        taskmanager_id: str
+            32-character hexadecimal string that identifies a task manager.
+
+        Returns
+        -------
+        dict
+            ThreadName -> StringifiedThreadInfo key-value pairs.
+        """
+        query_result = _execute_rest_request(url=f'{self.prefix}/{taskmanager_id}/thread-dump')['threadInfos']
+        return dict([(elem['threadName'], elem['stringifiedThreadInfo']) for elem in query_result])
+
+
 class FlinkRestClientV1:
 
     def __init__(self, host, port):
         self.host = host
         self.port = port
+
+    @property
+    def taskmanagers(self):
+        return TaskManagersClient(prefix=f'http://{self.host}:{self.port}/v1')
 
     def delete_cluster(self):
         """
@@ -240,6 +435,93 @@ class FlinkRestClientV1:
         """
         return self._execute_rest_request(url=f'/jobs{job_id}', http_method='GET')
 
+    def get_job_config(self, job_id):
+        """
+        Returns the configuration of a job.
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
+        return self._execute_rest_request(url=f'/jobs/{job_id}/config', http_method='GET')
+
+    def get_job_exceptions(self, job_id):
+        """
+        Returns the most recent exceptions that have been handled by Flink for this job. The
+        'exceptionHistory.truncated' flag defines whether exceptions were filtered out through the GET parameter. The
+        backend collects only a specific amount of most recent exceptions per job. This can be configured through
+        web.exception-history-size in the Flink configuration. The following first-level members are deprecated:
+        'root-exception', 'timestamp', 'all-exceptions', and 'truncated'. Use the data provided through
+        'exceptionHistory', instead.
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
+        # TODO: optional maxExceptions get parameters need to be added in future
+        return self._execute_rest_request(url=f'/jobs/{job_id}/exceptions', http_method='GET')
+
+    def get_job_execution_result(self, job_id):
+        """
+        Returns the result of a job execution. Gives access to the execution time of the job and to all accumulators
+        created by this job.
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
+        return self._execute_rest_request(url=f'/jobs/{job_id}/execution-result', http_method='GET')
+
+    def get_job_metrics(self, job_id):
+        """
+        Provides access to job metrics.
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
+        return self._execute_rest_request(url=f'/jobs/{job_id}/metrics', http_method='GET')
+
+    def get_job_plan(self, job_id):
+        """
+        Returns the dataflow plan of a job.
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
+        return self._execute_rest_request(url=f'/jobs/{job_id}/plan', http_method='GET')
+
     def get_job_accumulators(self, job_id):
         """
         Returns the accumulators for all tasks of a job, aggregated across the respective subtasks.
@@ -254,7 +536,7 @@ class FlinkRestClientV1:
         dict
             Query result as a dict.
         """
-        return self._execute_rest_request(url=f'/jobs{job_id}/accumulators', http_method='GET')
+        return self._execute_rest_request(url=f'/jobs/{job_id}/accumulators', http_method='GET')
 
     def get_job_checkpoint_statistics(self, job_id, checkpoint_id=None, vertex_id=None):
         """
@@ -303,7 +585,7 @@ class FlinkRestClientV1:
         dict
             Query result as a dict.
         """
-        return self._execute_rest_request(url=f'/jobs{job_id}/checkpoints/config', http_method='GET')
+        return self._execute_rest_request(url=f'/jobs/{job_id}/checkpoints/config', http_method='GET')
 
     def get_jobs_metrics(self, metrics=None, aggs=None, job_ids=None):
         """
@@ -358,7 +640,7 @@ class FlinkRestClientV1:
         if accepted_status_code is None:
             accepted_status_code = 200
 
-        response = requests.request(method=http_method, url=f'http://{self.host}:/v1{self.port}{url}', files=files)
+        response = requests.request(method=http_method, url=f'http://{self.host}:{self.port}/v1{url}', files=files)
         if response.status_code == accepted_status_code:
             return response.json()
         else:
