@@ -50,6 +50,8 @@ class TaskManagersClient:
         """
         Returns an overview over all task managers.
 
+        Endpoint: [GET] /taskmanagers
+
         Returns
         -------
         list
@@ -82,8 +84,9 @@ class TaskManagersClient:
     def metrics(self, metric_names=None, agg_modes=None, taskmanager_ids=None):
         """
         Provides access to aggregated task manager metrics.
-
         By default it returns with all existing metric names.
+
+        Endpoint: [GET] /taskmanagers/metrics
 
         Parameters
         ----------
@@ -95,7 +98,8 @@ class TaskManagersClient:
             sum, avg". Default: <all modes>
 
         taskmanager_ids: list
-            List of 32-character hexadecimal strings to select specific task managers. Default: <all taskmanagers>
+            List of 32-character hexadecimal strings to select specific task managers. The list of valid taskmanager ids
+            are available through the taskmanager_ids() method. Default: <all taskmanagers>.
 
         Returns
         -------
@@ -134,6 +138,8 @@ class TaskManagersClient:
         """
         Returns details for a task manager.
 
+        Endpoint: [GET] /taskmanagers/:taskmanagerid
+
         Parameters
         ----------
         taskmanager_id: str
@@ -150,6 +156,8 @@ class TaskManagersClient:
         """
         Returns the list of log files on a TaskManager.
 
+        Endpoint: [GET] /taskmanagers/:taskmanagerid/logs
+
         Parameters
         ----------
         taskmanager_id: str
@@ -165,6 +173,8 @@ class TaskManagersClient:
     def get_metrics(self, taskmanager_id, metric_names=None):
         """
         Provides access to task manager metrics.
+
+        Endpoint: [GET] /taskmanagers/:taskmanagerid/metrics
 
         Parameters
         ----------
@@ -191,6 +201,8 @@ class TaskManagersClient:
         """
         Returns the thread dump of the requested TaskManager.
 
+        Endpoint: [GET] /taskmanagers/:taskmanagerid/thread-dump
+
         Parameters
         ----------
         taskmanager_id: str
@@ -205,11 +217,44 @@ class TaskManagersClient:
         return dict([(elem['threadName'], elem['stringifiedThreadInfo']) for elem in query_result])
 
 
+class JobsClient:
+    def __init__(self, prefix):
+        """
+        Constructor.
+
+        Parameters
+        ----------
+        prefix: str
+            REST API url prefix. It must contain the host, port pair.
+        """
+        self.prefix = f'{prefix}/jobs'
+
+    # TODO: implement jobs POST and get request
+    def all(self):
+        pass
+
+    def submit(self):
+        pass
+
+
 class FlinkRestClientV1:
 
     def __init__(self, host, port):
         self.host = host
         self.port = port
+
+    def overview(self):
+        """
+        Returns an overview over the Flink cluster.
+
+        Endpoint: [GET] /overview
+
+        Returns
+        -------
+        dict
+            Key-value pairs of flink cluster infos.
+        """
+        return _execute_rest_request(self._assemble_url('/overview'))
 
     @property
     def taskmanagers(self):
@@ -633,6 +678,9 @@ class FlinkRestClientV1:
             Query result as a dict.
         """
         return self._execute_rest_request(url=f'/jobs{job_id}', http_method='PATCH', accepted_status_code=202)
+
+    def _assemble_url(self, suffix):
+        return f'http://{self.host}:{self.port}/v1{suffix}'
 
     def _execute_rest_request(self, url, http_method, accepted_status_code=None, files=None):
 
