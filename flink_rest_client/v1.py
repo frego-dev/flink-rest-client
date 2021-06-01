@@ -217,6 +217,41 @@ class TaskManagersClient:
         return dict([(elem['threadName'], elem['stringifiedThreadInfo']) for elem in query_result])
 
 
+class JarsClient:
+    def __init__(self, prefix):
+        """
+        Constructor.
+
+        Parameters
+        ----------
+        prefix: str
+            REST API url prefix. It must contain the host, port pair.
+        """
+        self.prefix = f'{prefix}/jars'
+
+    def all(self):
+        return _execute_rest_request(url=self.prefix)
+
+    def upload(self, path_to_jar):
+        """
+
+        Parameters
+        ----------
+        path_to_jar: str
+            Path to jar file
+
+        Returns
+        -------
+        dict
+
+        """
+        filename = os.path.basename(path_to_jar)
+        files = {
+            'file': (filename, (open(path_to_jar, 'rb')), 'application/x-java-archive')
+        }
+        return _execute_rest_request(url=f'{self.prefix}/upload', http_method='POST', files=files)
+
+
 class JobsClient:
     def __init__(self, prefix):
         """
@@ -229,9 +264,18 @@ class JobsClient:
         """
         self.prefix = f'{prefix}/jobs'
 
-    # TODO: implement jobs POST and get request
     def all(self):
-        pass
+        """
+        Returns an overview over all jobs and their current state.
+
+        Endpoint: [GET] /jobs
+
+        Returns
+        -------
+        dict
+
+        """
+        return _execute_rest_request(url=self.prefix)
 
     def submit(self):
         pass
@@ -259,6 +303,10 @@ class FlinkRestClientV1:
     @property
     def taskmanagers(self):
         return TaskManagersClient(prefix=f'http://{self.host}:{self.port}/v1')
+
+    @property
+    def jars(self):
+        return JarsClient(prefix=f'http://{self.host}:{self.port}/v1')
 
     def delete_cluster(self):
         """
