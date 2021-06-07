@@ -4,6 +4,7 @@ config
 dataset
 """
 import os
+import ntpath
 import requests
 
 
@@ -15,7 +16,6 @@ class RestException(Exception):
 
 def _execute_rest_request(url, http_method=None, accepted_status_code=None, files=None, params=None, data=None,
                           json=None):
-
     if http_method is None:
         http_method = 'GET'
     if params is None:
@@ -346,7 +346,52 @@ class JarsClient:
         if allow_non_restored_state is not None:
             data['allowNonRestoredState'] = allow_non_restored_state
 
-        return _execute_rest_request(url=f'{self.prefix}/{jar_id}/run', http_method='POST', json=data)
+        return _execute_rest_request(url=f'{self.prefix}/{jar_id}/run', http_method='POST', json=data)['jobid']
+
+    def upload_and_run(self, path_to_jar, arguments=None, entry_class=None, parallelism=None, savepoint_path=None,
+                       allow_non_restored_state=None):
+        """
+        Helper method to upload and start a jar in one method call.
+
+        Parameters
+        ----------
+        path_to_jar: str
+            Path to the jar file.
+
+        arguments: dict
+            (Optional) Comma-separated list of program arguments.
+
+        entry_class: str
+            (Optional) String value that specifies the fully qualified name of the entry point class. Overrides the
+            class defined in the jar file manifest.
+
+        parallelism: int
+             (Optional) Positive integer value that specifies the desired parallelism for the job.
+
+        savepoint_path: str
+             (Optional) String value that specifies the path of the savepoint to restore the job from.
+
+        allow_non_restored_state: bool
+             (Optional) Boolean value that specifies whether the job submission should be rejected if the savepoint
+             contains state that cannot be mapped back to the job.
+
+        Returns
+        -------
+        str
+            32-character hexadecimal string value that identifies a job.
+
+        Raises
+        ------
+        RestException
+            If an error occurred during the upload of jar file.
+        """
+        result = self.upload(path_to_jar=path_to_jar)
+        if not result['status'] == 'success':
+            raise RestException('Could not upload the input jar file.', result)
+
+        return self.run(ntpath.basename(result['filename']), arguments=arguments, entry_class=entry_class,
+                        parallelism=parallelism, savepoint_path=savepoint_path,
+                        allow_non_restored_state=allow_non_restored_state)
 
     def delete(self, jar_id):
         """
@@ -489,13 +534,274 @@ class JobsClient:
 
         Returns
         -------
+        list
+            List of jobs and their current state.
+        """
+        return _execute_rest_request(url=self.prefix)['jobs']
+
+    # TODO: job submit
+
+    def job_ids(self):
+        """
+        Returns the list of job_ids.
+
+        Returns
+        -------
+        list
+            List of job ids.
+        """
+        return [elem['id'] for elem in self.all()]
+
+    def overview(self):
+        """
+        Returns an overview over all jobs.
+
+        Endpoint: [GET] /jobs/overview
+
+        Returns
+        -------
+        list
+            List of existing jobs.
+        """
+        return _execute_rest_request(url=f'{self.prefix}/overview')['jobs']
+
+    def metric_names(self):
+        """
+        Returns the supported metric names.
+
+        Returns
+        -------
+        list
+            List of metric names.
+        """
+        return [elem['id'] for elem in _execute_rest_request(url=f'{self.prefix}/metrics')]
+
+    def metrics(self, metric_names=None, agg_modes=None, job_ids=None):
+        """
+        Returns an overview over all jobs.
+
+        Endpoint: [GET] /jobs/metrics
+
+        Returns
+        -------
+        dict
+            Aggregated job metrics.
+        """
+        if metric_names is None:
+            metric_names = self.metric_names()
+
+        supported_agg_modes = ['min', 'max', 'sum', 'avg']
+        if agg_modes is None:
+            agg_modes = supported_agg_modes
+        if len(set(agg_modes).difference(set(supported_agg_modes))) > 0:
+            raise RestException(f"The provided aggregation modes list contains invalid value. Supported aggregation "
+                                f"modes: {','.join(supported_agg_modes)}; given list: {','.join(agg_modes)}")
+
+        if job_ids is None:
+            job_ids = self.job_ids()
+
+        params = {
+            'get': ','.join(metric_names),
+            'agg': ','.join(agg_modes),
+            'jobs': ','.join(job_ids)
+        }
+        query_result = _execute_rest_request(url=f'{self.prefix}/metrics', params=params)
+
+        result = {}
+        for elem in query_result:
+            metric_name = elem.pop('id')
+            result[metric_name] = elem
+
+        return result
+
+    def get(self, job_id):
+        """
+        Returns details of a job.
+
+        Endpoint: [GET] /jobs/:jobid
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        dict
+            Details of the selected job.
+        """
+        return _execute_rest_request(url=f'{self.prefix}/{job_id}')
+
+    def get_config(self, job_id):
+        """
+        Returns the configuration of a job.
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        dict
+            Job configuration
+        """
+        return _execute_rest_request(url=f'{self.prefix}/{job_id}/config')
+
+    def get_exceptions(self, job_id):
+        """
+       Returns the most recent exceptions that have been handled by Flink for this job.
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        dict
+            The most recent exceptions.
+        """
+        return _execute_rest_request(url=f'{self.prefix}/{job_id}/exceptions')
+
+    def terminate(self, job_id):
+        """
+        Terminates a job.
+
+        Endpoint: [GET] /jobs/:jobid
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        bool
+            True if the job has been canceled, otherwise False.
+        """
+        res = _execute_rest_request(url=f'{self.prefix}/{job_id}', http_method="PATCH", accepted_status_code=202)
+        if len(res) < 1:
+            return True
+        else:
+            return False
+
+    def get_accumulators(self, job_id, include_serialized_value=None):
+        """
+        Returns the accumulators for all tasks of a job, aggregated across the respective subtasks.
+
+        Endpoint: [GET] /jobs/:jobid/accumulators
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        include_serialized_value: bool
+             (Optional) Boolean value that specifies whether serialized user task accumulators should be included in
+             the response.
+
+        Returns
+        -------
+        dict
+            Accumulators for all task.
+        """
+
+        params = {}
+        if include_serialized_value is not None:
+            params['includeSerializedValue'] = 'true' if include_serialized_value else 'false'
+
+        return _execute_rest_request(url=f'{self.prefix}/{job_id}/accumulators', http_method="GET", params=params)
+
+    def get_checkpointing_configuration(self, job_id):
+        """
+        Returns the checkpointing configuration of the selected job_id
+
+        Endpoint: [GET] /jobs/:jobid/checkpoints
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        dict
+            Checkpointing configuration of the selected job.
+        """
+        return _execute_rest_request(url=f'{self.prefix}/{job_id}/checkpoints/config', http_method="GET")
+
+    def get_checkpoints(self, job_id):
+        """
+        Returns checkpointing statistics for a job.
+
+        Endpoint: [GET] /jobs/:jobid/checkpoints
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        dict
+            Checkpointing statistics for the selected job: counts, summary, latest and history.
+        """
+        return _execute_rest_request(url=f'{self.prefix}/{job_id}/checkpoints', http_method="GET")
+
+    def get_checkpoint_ids(self, job_id):
+        """
+        Returns checkpoint ids of the job_id.
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        list
+            List of checkpoint ids.
+        """
+        return [elem['id'] for elem in self.get_checkpoints(job_id=job_id)['history']]
+
+    def get_checkpoint_details(self, job_id, checkpoint_id, show_subtasks=False):
+        """
+        Returns details for a checkpoint.
+
+        Endpoint: [GET] /jobs/:jobid/checkpoints/details/:checkpointid
+
+        If show_subtasks is true:
+        Endpoint: [GET] /jobs/:jobid/checkpoints/details/:checkpointid/subtasks/:vertexid
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        checkpoint_id: int
+            Long value that identifies a checkpoint.
+
+        show_subtasks: bool
+            If it is True, the details of the subtask are also returned.
+
+        Returns
+        -------
         dict
 
         """
-        return _execute_rest_request(url=self.prefix)
+        checkpoint_details = _execute_rest_request(url=f'{self.prefix}/{job_id}/checkpoints/details/{checkpoint_id}',
+                                                   http_method="GET")
+        if not show_subtasks:
+            return checkpoint_details
 
-    def submit(self):
-        pass
+        subtasks = {}
+        for vertex_id in checkpoint_details['tasks'].keys():
+            subtasks[vertex_id] = _execute_rest_request(
+                url=f'{self.prefix}/{job_id}/checkpoints/details/{checkpoint_id}/subtasks/{vertex_id}',
+                http_method="GET")
+        checkpoint_details['subtasks'] = subtasks
+        return checkpoint_details
 
 
 class FlinkRestClientV1:
@@ -532,6 +838,10 @@ class FlinkRestClientV1:
     @property
     def jars(self):
         return JarsClient(prefix=self.api_url)
+
+    @property
+    def jobs(self):
+        return JobsClient(prefix=self.api_url)
 
     def delete_cluster(self):
         """
