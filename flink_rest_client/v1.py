@@ -5,6 +5,8 @@ dataset
 """
 import os
 import ntpath
+from dataclasses import dataclass
+
 import requests
 
 
@@ -36,6 +38,18 @@ def _execute_rest_request(url, http_method=None, accepted_status_code=None, file
         else:
             error_str = ''
         raise RestException(f"REST response error ({response.status_code}): {error_str}")
+
+
+class JobTrigger:
+    def __init__(self, prefix, type_name, job_id, trigger_id):
+        self._prefix = prefix
+        self._type_name = type_name
+        self.job_id = job_id
+        self.trigger_id = trigger_id
+
+    @property
+    def status(self):
+        return _execute_rest_request(url=f'{self._prefix}/{self.job_id}/{self._type_name}/{self.trigger_id}')
 
 
 class TaskManagersClient:
@@ -582,6 +596,20 @@ class JobsClient:
 
         Endpoint: [GET] /jobs/metrics
 
+        Parameters
+        ----------
+        metric_names: list
+            (optional) List of selected specific metric names. Default: <all metrics>
+
+        agg_modes: list
+            (optional) List of aggregation modes which should be calculated. Available aggregations are: "min, max,
+            sum, avg". Default: <all modes>
+
+        job_ids: list
+            List of 32-character hexadecimal strings to select specific jobs. The list of valid jobs
+            are available through the job_ids() method. Default: <all taskmanagers>.
+
+
         Returns
         -------
         dict
@@ -636,6 +664,8 @@ class JobsClient:
         """
         Returns the configuration of a job.
 
+        Endpoint: [GET] /jobs/:jobid/config
+
         Parameters
         ----------
         job_id: str
@@ -650,7 +680,9 @@ class JobsClient:
 
     def get_exceptions(self, job_id):
         """
-       Returns the most recent exceptions that have been handled by Flink for this job.
+        Returns the most recent exceptions that have been handled by Flink for this job.
+
+        Endpoint: [GET] /jobs/:jobid/exceptions
 
         Parameters
         ----------
@@ -664,11 +696,12 @@ class JobsClient:
         """
         return _execute_rest_request(url=f'{self.prefix}/{job_id}/exceptions')
 
-    def terminate(self, job_id):
+    def get_execution_result(self, job_id):
         """
-        Terminates a job.
+        Returns the result of a job execution. Gives access to the execution time of the job and to all accumulators
+        created by this job.
 
-        Endpoint: [GET] /jobs/:jobid
+        Endpoint: [GET] /jobs/:jobid/execution-result
 
         Parameters
         ----------
@@ -677,14 +710,55 @@ class JobsClient:
 
         Returns
         -------
-        bool
-            True if the job has been canceled, otherwise False.
+        dict
+            The execution result of the selected job.
         """
-        res = _execute_rest_request(url=f'{self.prefix}/{job_id}', http_method="PATCH", accepted_status_code=202)
-        if len(res) < 1:
-            return True
-        else:
-            return False
+        return _execute_rest_request(url=f'{self.prefix}/{job_id}/execution-result')
+
+    def get_metrics(self, job_id, metric_names=None):
+        """
+        Provides access to job metrics.
+
+        Endpoint: [GET] /jobs/:jobid/metrics
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        metric_names: list
+            (optional) List of selected specific metric names. Default: <all metrics>
+
+        Returns
+        -------
+        dict
+            Job metrics.
+        """
+        if metric_names is None:
+            metric_names = self.metric_names()
+        params = {
+            'get': ','.join(metric_names)
+        }
+        query_result = _execute_rest_request(url=f'{self.prefix}/{job_id}/metrics', params=params)
+        return dict([(elem['id'], elem['value']) for elem in query_result])
+
+    def get_plan(self, job_id):
+        """
+        Returns the dataflow plan of a job.
+
+        Endpoint: [GET] /jobs/:jobid/plan
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        dict
+            Dataflow plan
+        """
+        return _execute_rest_request(url=f'{self.prefix}/{job_id}/plan')['plan']
 
     def get_accumulators(self, job_id, include_serialized_value=None):
         """
@@ -802,6 +876,91 @@ class JobsClient:
                 http_method="GET")
         checkpoint_details['subtasks'] = subtasks
         return checkpoint_details
+
+    def rescale(self, job_id, parallelism):
+        """
+        Triggers the rescaling of a job. This async operation would return a 'triggerid' for further query identifier.
+
+        Endpoint: [GET] /jobs/:jobid/rescaling
+
+        Notes
+        -----
+        Using Flink version 1.12, the method will raise RestHandlerException because this rescaling is temporarily
+        disabled. See FLINK-12312.
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+        parallelism: int
+            Positive integer value that specifies the desired parallelism.
+
+        Returns
+        -------
+        JobTrigger
+            Object that can be used to query the status of rescaling.
+        """
+        params = {
+            'parallelism': parallelism
+        }
+        trigger_id = _execute_rest_request(
+            url=f'{self.prefix}/{job_id}/rescaling',
+            http_method="PATCH",
+            params=params)['triggerid']
+        return JobTrigger(self.prefix, 'rescaling', job_id, trigger_id)
+
+    def create_savepoint(self, job_id, target_directory, cancel_job=False):
+        """
+        Triggers a savepoint, and optionally cancels the job afterwards. This async operation would return a
+        JobTrigger for further query identifier.
+
+        Endpoint: [GET] /jobs/:jobid/savepoints
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+        target_directory: str
+            Savepoint target directory.
+        cancel_job: bool
+            If it is True, it also stops the job after the savepoint creation.
+
+        Returns
+        -------
+        JobTrigger
+            Object that can be used to query the status of savepoint.
+        """
+        trigger_id = _execute_rest_request(
+            url=f'{self.prefix}/{job_id}/savepoints',
+            http_method="POST",
+            accepted_status_code=202,
+            json={
+                'cancel-job': cancel_job,
+                'target-directory': target_directory
+            })['request-id']
+        return JobTrigger(self.prefix, 'savepoints', job_id, trigger_id)
+
+    def terminate(self, job_id):
+        """
+        Terminates a job.
+
+        Endpoint: [GET] /jobs/:jobid
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        bool
+            True if the job has been canceled, otherwise False.
+        """
+        res = _execute_rest_request(url=f'{self.prefix}/{job_id}', http_method="PATCH", accepted_status_code=202)
+        if len(res) < 1:
+            return True
+        else:
+            return False
 
 
 class FlinkRestClientV1:
