@@ -528,6 +528,87 @@ class JobmanagerClient:
         return dict([(elem['id'], elem['value']) for elem in query_result])
 
 
+class JobVertexClient:
+    def __init__(self, prefix, job_id, vertex_id):
+        """
+        Constructor.
+
+        Parameters
+        ----------
+        prefix: str
+            REST API url prefix. It must contain the host, port pair.
+        """
+        self._prefix = prefix
+        self.job_id = job_id
+        self.vertex_id = vertex_id
+
+    @property
+    def prefix_url(self):
+        return f"{self._prefix}/{self.job_id}/vertices/{self.vertex_id}"
+
+    def details(self):
+        """
+        Returns details for a task, with a summary for each of its subtasks.
+
+        Endpoint: [GET] /jobs/:jobid/vertices/:vertexid
+
+        Returns
+        -------
+        dict
+            details for a task.
+        """
+        return _execute_rest_request(url=self.prefix_url)
+
+    def backpressure(self):
+        """
+        Returns back-pressure information for a job, and may initiate back-pressure sampling if necessary.
+
+        Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/backpressure
+
+        Returns
+        -------
+        dict
+            Backpressure information
+        """
+        return _execute_rest_request(url=f"{self.prefix_url}/backpressure")
+
+    def metric_names(self):
+        """
+        Returns the supported metric names.
+
+        Returns
+        -------
+        list
+            List of metric names.
+        """
+        return [elem['id'] for elem in _execute_rest_request(url=f'{self.prefix_url}/metrics')]
+
+    def metrics(self, metric_names=None):
+        """
+        Provides access to task metrics.
+
+        Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/metrics
+
+        Returns
+        -------
+        dict
+            Task metrics.
+        """
+        if metric_names is None:
+            metric_names = self.metric_names()
+
+        params = {
+            'get': ','.join(metric_names)
+        }
+        query_result = _execute_rest_request(url=f'{self.prefix_url}/metrics', params=params)
+        result = {}
+        for elem in query_result:
+            metric_name = elem.pop('id')
+            result[metric_name] = elem
+        # TODO: test with backpressure
+        return result
+
+
 class JobsClient:
     def __init__(self, prefix):
         """
@@ -552,8 +633,6 @@ class JobsClient:
             List of jobs and their current state.
         """
         return _execute_rest_request(url=self.prefix)['jobs']
-
-    # TODO: job submit
 
     def job_ids(self):
         """
@@ -760,6 +839,22 @@ class JobsClient:
         """
         return _execute_rest_request(url=f'{self.prefix}/{job_id}/plan')['plan']
 
+    def get_vertex_ids(self, job_id):
+        """
+        Returns the ids of vertices of the selected job.
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+
+        Returns
+        -------
+        list
+            List of identifiers.
+        """
+        return [elem['id'] for elem in self.get(job_id)['vertices']]
+
     def get_accumulators(self, job_id, include_serialized_value=None):
         """
         Returns the accumulators for all tasks of a job, aggregated across the respective subtasks.
@@ -914,6 +1009,9 @@ class JobsClient:
         Triggers a savepoint, and optionally cancels the job afterwards. This async operation would return a
         JobTrigger for further query identifier.
 
+        Attention: The target directory has to be a location accessible by both the JobManager(s) and TaskManager(s)
+        e.g. a location on a distributed file-system or Object Store.
+
         Endpoint: [GET] /jobs/:jobid/savepoints
 
         Parameters
@@ -961,6 +1059,64 @@ class JobsClient:
             return True
         else:
             return False
+
+    def stop(self, job_id, target_directory, drain=False):
+        """
+        Stops a job with a savepoint. This async operation would return a JobTrigger for further query identifier.
+
+        Attention: The target directory has to be a location accessible by both the JobManager(s) and TaskManager(s)
+        e.g. a location on a distributed file-system or Object Store.
+
+        Draining emits the maximum watermark before stopping the job. When the watermark is emitted, all event time
+        timers will fire, allowing you to process events that depend on this timer (e.g. time windows or process
+        functions). This is useful when you want to fully shut down your job without leaving any unhandled events
+        or state.
+
+        Endpoint: [GET] /jobs/:jobid/stop
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+        target_directory: str
+            Savepoint target directory.
+        drain: bool
+            (Optional) If it is True, it emits the maximum watermark before stopping the job. default: False
+
+        Returns
+        -------
+        JobTrigger
+            Object that can be used to query the status of savepoint.
+        """
+        data = {
+            'drain': False if drain is None else drain,
+            'targetDirectory': target_directory
+        }
+
+        trigger_id = _execute_rest_request(
+            url=f'{self.prefix}/{job_id}/stop',
+            http_method="POST",
+            accepted_status_code=202,
+            json=data)['request-id']
+        return JobTrigger(self.prefix, 'savepoints', job_id, trigger_id)
+
+    def get_vertex(self, job_id, vertex_id):
+        """
+        Returns a JobVertexClient.
+
+        Parameters
+        ----------
+        job_id: str
+            32-character hexadecimal string value that identifies a job.
+        vertex_id: str
+            32-character hexadecimal string value that identifies a vertex.
+
+        Returns
+        -------
+        JobVertexClient
+            JobVertexClient instance that can execute vertex related queries.
+        """
+        return JobVertexClient(self.prefix, job_id, vertex_id)
 
 
 class FlinkRestClientV1:
