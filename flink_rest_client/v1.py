@@ -8,6 +8,7 @@ import ntpath
 from dataclasses import dataclass
 
 import requests
+from pip._internal.utils.deprecation import deprecated
 
 
 class RestException(Exception):
@@ -50,6 +51,16 @@ class JobTrigger:
     @property
     def status(self):
         return _execute_rest_request(url=f'{self._prefix}/{self.job_id}/{self._type_name}/{self.trigger_id}')
+
+
+class DatasetTrigger:
+    def __init__(self, prefix, trigger_id):
+        self._prefix = prefix
+        self.trigger_id = trigger_id
+
+    @property
+    def status(self):
+        return _execute_rest_request(url=f'{self._prefix}/{self.trigger_id}')
 
 
 class TaskManagersClient:
@@ -528,6 +539,178 @@ class JobmanagerClient:
         return dict([(elem['id'], elem['value']) for elem in query_result])
 
 
+class JobVertexSubtaskClient:
+    def __init__(self, prefix):
+        """
+        Constructor.
+
+        Parameters
+        ----------
+        prefix: str
+            REST API url prefix. It must contain the host, port pair.
+        """
+        self._prefix = prefix
+
+    @property
+    def prefix_url(self):
+        return f"{self._prefix}/subtasks"
+
+    def subtask_ids(self):
+        """
+        Returns the subtask identifiers.
+
+        Returns
+        -------
+        list
+            Positive integer list of subtask ids.
+        """
+        return [elem['subtask'] for elem in self.accumulators()['subtasks']]
+
+    def accumulators(self):
+        """
+        Returns all user-defined accumulators for all subtasks of a task.
+
+        Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/accumulators
+
+        Returns
+        -------
+        dict
+            User-defined accumulators
+        """
+        return _execute_rest_request(url=f"{self.prefix_url}/accumulators")
+
+    def metric_names(self):
+        """
+        Returns the supported metric names.
+
+        Returns
+        -------
+        list
+            List of metric names.
+        """
+        return [elem['id'] for elem in _execute_rest_request(url=f'{self.prefix_url}/metrics')]
+
+    def metrics(self, metric_names=None, agg_modes=None, subtask_ids=None):
+        """
+        Provides access to aggregated subtask metrics.
+        By default it returns with all existing metric names.
+
+        Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/subtasks/metrics
+
+        Parameters
+        ----------
+        metric_names: list
+            (optional) List of selected specific metric names. Default: <all metrics>
+
+        agg_modes: list
+            (optional) List of aggregation modes which should be calculated. Available aggregations are: "min, max,
+            sum, avg". Default: <all modes>
+
+        subtask_ids: list
+            List of positive integers to select specific subtasks. The list of valid subtask ids is available through
+            the subtask_ids() method. Default: <all subtasks>.
+
+        Returns
+        -------
+        dict
+            Key-value pairs of metrics.
+        """
+
+        if metric_names is None:
+            metric_names = self.metric_names()
+
+        supported_agg_modes = ['min', 'max', 'sum', 'avg']
+        if agg_modes is None:
+            agg_modes = supported_agg_modes
+        if len(set(agg_modes).difference(set(supported_agg_modes))) > 0:
+            raise RestException(f"The provided aggregation modes list contains invalid value. Supported aggregation "
+                                f"modes: {','.join(supported_agg_modes)}; given list: {','.join(agg_modes)}")
+
+        if subtask_ids is None:
+            subtask_ids = self.subtask_ids()
+
+        params = {
+            'get': ','.join(metric_names),
+            'agg': ','.join(agg_modes),
+            'subtasks': ','.join([str(elem) for elem in subtask_ids])
+        }
+        query_result = _execute_rest_request(url=f'{self.prefix_url}/metrics', params=params)
+
+        result = {}
+        for elem in query_result:
+            metric_name = elem.pop('id')
+            result[metric_name] = elem
+
+        return result
+
+    def get(self, subtask_id):
+        """
+        Returns details of the current or latest execution attempt of a subtask.
+
+        Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/subtasks/:subtaskindex
+
+        Parameters
+        ----------
+        subtask_id: int
+            Positive integer value that identifies a subtask.
+
+        Returns
+        -------
+        dict
+
+        """
+        return _execute_rest_request(url=f"{self.prefix_url}/{subtask_id}")
+
+    def get_attempt(self, subtask_id, attempt_id=None):
+        """
+        Returns details of an execution attempt of a subtask. Multiple execution attempts happen in case of
+        failure/recovery.
+
+        Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/subtasks/:subtaskindex/attempts/:attempt
+
+        Parameters
+        ----------
+        subtask_id: int
+            Positive integer value that identifies a subtask.
+
+        attempt_id: int
+            (Optional) Positive integer value that identifies an execution attempt.
+            Default: current execution attempt's id
+
+        Returns
+        -------
+        dict
+            Details of the selected attempt.
+        """
+        if attempt_id is None:
+            return self.get(subtask_id)
+        return _execute_rest_request(url=f"{self.prefix_url}/{subtask_id}/attempts/{attempt_id}")
+
+    def get_attempt_accumulators(self, subtask_id, attempt_id=None):
+        """
+        Returns the accumulators of an execution attempt of a subtask. Multiple execution attempts happen in case of
+        failure/recovery.
+
+        Parameters
+        ----------
+        subtask_id: int
+            Positive integer value that identifies a subtask.
+
+        attempt_id: int
+            (Optional) Positive integer value that identifies an execution attempt.
+            Default: current execution attempt's id
+
+
+        Returns
+        -------
+        dict
+            The accumulators of the selected execution attempt of a subtask.
+        """
+        if attempt_id is None:
+            attempt_id = self.get(subtask_id)['attempt']
+        return _execute_rest_request(url=f"{self.prefix_url}/{subtask_id}/attempts/{attempt_id}/accumulators")
+
+
 class JobVertexClient:
     def __init__(self, prefix, job_id, vertex_id):
         """
@@ -545,6 +728,10 @@ class JobVertexClient:
     @property
     def prefix_url(self):
         return f"{self._prefix}/{self.job_id}/vertices/{self.vertex_id}"
+
+    @property
+    def subtasks(self):
+        return JobVertexSubtaskClient(self.prefix_url)
 
     def details(self):
         """
@@ -564,6 +751,10 @@ class JobVertexClient:
         Returns back-pressure information for a job, and may initiate back-pressure sampling if necessary.
 
         Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/backpressure
+
+        Notes
+        -----
+        The deprecated status means that the back pressure stats are not available.
 
         Returns
         -------
@@ -604,9 +795,47 @@ class JobVertexClient:
         result = {}
         for elem in query_result:
             metric_name = elem.pop('id')
-            result[metric_name] = elem
-        # TODO: test with backpressure
+            result[metric_name] = elem['value']
         return result
+
+    def subtasktimes(self):
+        """
+        Returns time-related information for all subtasks of a task.
+
+        Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/subtasktimes
+
+        Returns
+        -------
+        dict
+            Time-related information for all subtasks
+        """
+        return _execute_rest_request(url=f"{self.prefix_url}/subtasktimes")
+
+    def taskmanagers(self):
+        """
+        Returns task information aggregated by task manager.
+
+        Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/taskmanagers
+
+        Returns
+        -------
+        dict
+            Task information aggregated by task manager.
+        """
+        return _execute_rest_request(url=f"{self.prefix_url}/taskmanagers")
+
+    def watermarks(self):
+        """
+        Returns the watermarks for all subtasks of a task.
+
+        Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/watermarks
+
+        Returns
+        -------
+        list
+            Watermarks for all subtasks of a task.
+        """
+        return _execute_rest_request(url=f"{self.prefix_url}/watermarks")
 
 
 class JobsClient:
@@ -1125,19 +1354,6 @@ class FlinkRestClientV1:
         self.host = host
         self.port = port
 
-    def overview(self):
-        """
-        Returns an overview over the Flink cluster.
-
-        Endpoint: [GET] /overview
-
-        Returns
-        -------
-        dict
-            Key-value pairs of flink cluster infos.
-        """
-        return _execute_rest_request(self._assemble_url('/overview'))
-
     @property
     def api_url(self):
         return f'http://{self.host}:{self.port}/v1'
@@ -1158,42 +1374,64 @@ class FlinkRestClientV1:
     def jobs(self):
         return JobsClient(prefix=self.api_url)
 
+    def overview(self):
+        """
+        Returns an overview over the Flink cluster.
+
+        Endpoint: [GET] /overview
+
+        Returns
+        -------
+        dict
+            Key-value pairs of flink cluster infos.
+        """
+        return _execute_rest_request(url=f'{self.api_url}/overview')
+
+    def config(self):
+        """
+        Returns the configuration of the WebUI.
+
+        Endpoint: [GET] /config
+
+        Returns
+        -------
+        dict
+            Query result as a dict.
+        """
+        return _execute_rest_request(url=f'{self.api_url}/config', http_method='GET')
+
     def delete_cluster(self):
         """
         Shuts down the cluster.
 
-        Returns
-        -------
-
-        """
-        return self._execute_rest_request(url='/cluster', http_method='DELETE')
-
-    def get_config(self):
-        """
-        Returns the configuration of the WebUI.
+        Endpoint: [GET] /cluster
 
         Returns
         -------
         dict
-            Query result as a dict.
+            Result of delete operation.
         """
-        return self._execute_rest_request(url='/config', http_method='GET')
+        return _execute_rest_request(url=f'{self.api_url}/cluster', http_method='DELETE')
 
-    def get_datasets(self):
+    def datasets(self):
         """
         Returns all cluster data sets.
 
+        Endpoint: [GET] /datasets
+
         Returns
         -------
         dict
             Query result as a dict.
         """
-        return self._execute_rest_request(url='/datasets', http_method='GET')
+        return _execute_rest_request(url=f'{self.api_url}/datasets', http_method='GET')
 
     def delete_dataset(self, dataset_id):
         """
-        Triggers the deletion of a cluster data set. This async operation would return a 'triggerid' for further query
-        identifier.
+        Triggers the deletion of a cluster data set. This async operation would return a DatasetTrigger for further
+        query identifier.
+
+        Endpoint: [DELETE] /datasets/:datasetid
 
         Parameters
         ----------
@@ -1202,392 +1440,9 @@ class FlinkRestClientV1:
 
         Returns
         -------
-        dict
-            Query result as a dict.
+        DatasetTrigger
+            Object that can be used to query the status of delete operation.
         """
-        return self._execute_rest_request(url=f'/datasets/{dataset_id}', http_method='DELETE',
-                                          accepted_status_code=202)
-
-    def get_delete_dataset_status(self, trigger_id):
-        """
-        Returns the status for the delete operation of a cluster data set.
-
-        Parameters
-        ----------
-        trigger_id: str
-            32-character hexadecimal string that identifies an asynchronous operation trigger ID. The ID was returned
-            then the operation was triggered.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url=f'/datasets/delete/{trigger_id}', http_method='GET')
-
-    def get_jars(self):
-        """
-        Returns a list of all jars previously uploaded via '/jars/upload'.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url='/jars', http_method='GET')
-
-    def upload_jar(self, path_to_jar):
-        """
-        Uploads a jar to the cluster.
-
-        Parameters
-        ----------
-        path_to_jar: str
-            Filepath to the jar file to upload.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        filename = os.path.basename(path_to_jar)
-        files = {
-            'file': (filename, (open(path_to_jar, 'rb')), 'application/x-java-archive')
-        }
-        return self._execute_rest_request(url='/jars/upload', http_method='POST', files=files)
-
-    def upload_maven_jar(self):
-        """
-
-        Returns
-        -------
-
-        """
-        # TODO
-
-    def get_jar_plan(self, jar_id):
-        """
-        Returns the dataflow plan of a job contained in a jar previously uploaded via '/jars/upload'. Program arguments
-        can be passed both via the JSON request (recommended) or query parameters.
-
-        Parameters
-        ----------
-        jar_id: str
-            String value that identifies a jar. When uploading the jar a path is returned, where the filename is the ID.
-            This value is equivalent to the `id` field in the list of uploaded jars (/jars).
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        # TODO: add optional params. The REST API has 2 end-point for handling this request. check which one should be
-        #  used.
-        return self._execute_rest_request(url=f'/jars/{jar_id}/plan', http_method='GET')
-
-    def run_jar(self, jar_id):
-        """
-
-        Parameters
-        ----------
-        jar_id
-
-        Returns
-        -------
-
-        """
-        # TODO
-
-    def delete_jar(self, jar_id):
-        """
-        Deletes a jar previously uploaded via '/jars/upload'.
-
-        Parameters
-        ----------
-        jar_id: str
-            String value that identifies a jar. When uploading the jar a path is returned, where the filename is the ID.
-            This value is equivalent to the `id` field in the list of uploaded jars (/jars).
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url=f'/jars/{jar_id}', http_method='DELETE')
-
-    def get_jobmanager_config(self):
-        """
-        Returns the cluster configuration.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url='/jobmanager/logs', http_method='GET')
-
-    def get_jobmanager_metrics(self):
-        """
-        Provides access to job manager metrics.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url='/jobmanager/metrics', http_method='GET')
-
-    def submit_job(self, params):
-        """
-        Submits a job. This call is primarily intended to be used by the Flink client. This call expects a
-        multipart/form-data request that consists of file uploads for the serialized JobGraph, jars and distributed
-        cache artifacts and an attribute named "request" for the JSON payload.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        # TODO: it is not clear for me, that what should be attached to the request
-        return self._execute_rest_request(url='/jobs', http_method='POST')
-
-    def get_jobs(self):
-        """
-        Returns an overview over all jobs and their current state.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url='/jobs', http_method='GET')
-
-    def get_job(self, job_id):
-        """
-        Returns details of a job.
-
-        Parameters
-        ----------
-        job_id: str
-            32-character hexadecimal string value that identifies a job.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url=f'/jobs{job_id}', http_method='GET')
-
-    def get_job_config(self, job_id):
-        """
-        Returns the configuration of a job.
-
-        Parameters
-        ----------
-        job_id: str
-            32-character hexadecimal string value that identifies a job.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url=f'/jobs/{job_id}/config', http_method='GET')
-
-    def get_job_exceptions(self, job_id):
-        """
-        Returns the most recent exceptions that have been handled by Flink for this job. The
-        'exceptionHistory.truncated' flag defines whether exceptions were filtered out through the GET parameter. The
-        backend collects only a specific amount of most recent exceptions per job. This can be configured through
-        web.exception-history-size in the Flink configuration. The following first-level members are deprecated:
-        'root-exception', 'timestamp', 'all-exceptions', and 'truncated'. Use the data provided through
-        'exceptionHistory', instead.
-
-        Parameters
-        ----------
-        job_id: str
-            32-character hexadecimal string value that identifies a job.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        # TODO: optional maxExceptions get parameters need to be added in future
-        return self._execute_rest_request(url=f'/jobs/{job_id}/exceptions', http_method='GET')
-
-    def get_job_execution_result(self, job_id):
-        """
-        Returns the result of a job execution. Gives access to the execution time of the job and to all accumulators
-        created by this job.
-
-        Parameters
-        ----------
-        job_id: str
-            32-character hexadecimal string value that identifies a job.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url=f'/jobs/{job_id}/execution-result', http_method='GET')
-
-    def get_job_metrics(self, job_id):
-        """
-        Provides access to job metrics.
-
-        Parameters
-        ----------
-        job_id: str
-            32-character hexadecimal string value that identifies a job.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url=f'/jobs/{job_id}/metrics', http_method='GET')
-
-    def get_job_plan(self, job_id):
-        """
-        Returns the dataflow plan of a job.
-
-        Parameters
-        ----------
-        job_id: str
-            32-character hexadecimal string value that identifies a job.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url=f'/jobs/{job_id}/plan', http_method='GET')
-
-    def get_job_accumulators(self, job_id):
-        """
-        Returns the accumulators for all tasks of a job, aggregated across the respective subtasks.
-
-        Parameters
-        ----------
-        job_id: str
-            32-character hexadecimal string value that identifies a job.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url=f'/jobs/{job_id}/accumulators', http_method='GET')
-
-    def get_job_checkpoint_statistics(self, job_id, checkpoint_id=None, vertex_id=None):
-        """
-        Returns checkpointing statistics for a job. If the checkpoint_id parameter is also provided, then it returns
-        details for the referenced checkpoint.
-
-        If the checkpoint_id parameter AND vertex_id are provided, it returns checkpoint statistics for a task and its
-        subtasks.
-
-        Parameters
-        ----------
-        job_id: str
-            32-character hexadecimal string value that identifies a job.
-        checkpoint_id: int
-            Int value that identifies a checkpoint.
-        vertex_id:str
-            32-character hexadecimal string value that identifies a job vertex.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        if checkpoint_id is not None and vertex_id is not None:
-            return self._execute_rest_request(
-                url=f'/jobs/{job_id}/checkpoints/details/{checkpoint_id}/subtasks/{vertex_id}',
-                http_method='GET')
-        elif checkpoint_id is not None:
-            return self._execute_rest_request(
-                url=f'/jobs/{job_id}/checkpoints/details/{checkpoint_id}',
-                http_method='GET')
-        else:
-            return self._execute_rest_request(url=f'/jobs/{job_id}/checkpoints', http_method='GET')
-
-    def get_job_checkpoint_configuration(self, job_id):
-        """
-        Returns the checkpointing configuration.
-
-        Parameters
-        ----------
-        job_id: str
-            32-character hexadecimal string value that identifies a job.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url=f'/jobs/{job_id}/checkpoints/config', http_method='GET')
-
-    def get_jobs_metrics(self, metrics=None, aggs=None, job_ids=None):
-        """
-        Provides access to aggregated job metrics.
-
-        Parameters
-        ----------
-        metrics: list
-            List of string values to select specific metrics.
-        aggs: list
-            List of aggregation modes which should be calculated. Available aggregations are: "min,
-            max, sum, avg".
-        job_ids: list
-            List of 32-character hexadecimal strings to select specific jobs.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url='/jobs/metrics', http_method='GET')
-
-    def get_jobs_overview(self):
-        """
-        Returns an overview over all jobs.
-
-        Returns
-        -------
-
-        """
-        return self._execute_rest_request(url='/jobs/overview', http_method='GET')
-
-    def terminate_job(self, job_id):
-        """
-        Terminates a job.
-
-        Parameters
-        ----------
-        job_id: str
-            32-character hexadecimal string value that identifies a job.
-
-        Returns
-        -------
-        dict
-            Query result as a dict.
-        """
-        return self._execute_rest_request(url=f'/jobs{job_id}', http_method='PATCH', accepted_status_code=202)
-
-    def _assemble_url(self, suffix):
-        return f'http://{self.host}:{self.port}/v1{suffix}'
-
-    def _execute_rest_request(self, url, http_method, accepted_status_code=None, files=None):
-
-        # If accepted_status_code is None then default value is set.
-        if accepted_status_code is None:
-            accepted_status_code = 200
-
-        response = requests.request(method=http_method, url=f'http://{self.host}:{self.port}/v1{url}', files=files)
-        if response.status_code == accepted_status_code:
-            return response.json()
-        else:
-            raise RestException(f"REST response error: {response.status_code}")
+        trigger_id = _execute_rest_request(url=f'{self.api_url}/datasets/{dataset_id}', http_method='DELETE',
+                                           accepted_status_code=202)['request-id']
+        return DatasetTrigger(prefix=f'{self.api_url}/delete', trigger_id=trigger_id)
