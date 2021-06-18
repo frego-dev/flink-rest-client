@@ -31,9 +31,10 @@ class JarsClient:
 
     def upload(self, path_to_jar):
         """
-        Uploads a jar to the cluster from the input path.
+        Uploads a jar to the cluster from the input path. The jar's name will be the original filename from the input
+        path.
 
-        Endpoint: [GET] /jars/upload
+        Endpoint: [POST] /jars/upload
 
         Parameters
         ----------
@@ -55,7 +56,7 @@ class JarsClient:
         """
         Returns the dataflow plan of a job contained in a jar previously uploaded via '/jars/upload'.
 
-        Endpoint: [GET] /jars/:jarid/plan
+        Endpoint: [POST] /jars/:jarid/plan
 
         Parameters
         ----------
@@ -80,7 +81,7 @@ class JarsClient:
         """
         Submits a job by running a jar previously uploaded via '/jars/upload'.
 
-        Endpoint: [GET] /jars/:jarid/run
+        Endpoint: [POST] /jars/:jarid/run
 
         Parameters
         ----------
@@ -199,7 +200,7 @@ class JarsClient:
             If the jar_id does not exist.
         """
         res = _execute_rest_request(url=f'{self.prefix}/{jar_id}', http_method='DELETE')
-        if len(res.key()) < 1:
+        if len(res.keys()) < 1:
             return True
         else:
             return False

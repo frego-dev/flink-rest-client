@@ -22,7 +22,7 @@ class FlinkRestClient:
             Version of the REST API. Default value: v1
         version
         """
-        port = str(8081 if port is None else port)
+        port = 8081 if port is None else port
         version = "v1" if version is None else version
 
         if version not in VERSIONS.keys():

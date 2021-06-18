@@ -23,7 +23,7 @@ class FlinkRestClientV1:
 
     @property
     def api_url(self):
-        return f'http://{self.host}:{self.port}/v1'
+        return f'http://{self.host}:{str(self.port)}/v1'
 
     @property
     def jobmanager(self):
@@ -71,7 +71,7 @@ class FlinkRestClientV1:
         """
         Shuts down the cluster.
 
-        Endpoint: [GET] /cluster
+        Endpoint: [DELETE] /cluster
 
         Returns
         -------
@@ -88,10 +88,10 @@ class FlinkRestClientV1:
 
         Returns
         -------
-        dict
-            Query result as a dict.
+        list
+            Query result as a list of datasets.
         """
-        return _execute_rest_request(url=f'{self.api_url}/datasets', http_method='GET')
+        return _execute_rest_request(url=f'{self.api_url}/datasets', http_method='GET')['dataSets']
 
     def delete_dataset(self, dataset_id):
         """
@@ -112,4 +112,4 @@ class FlinkRestClientV1:
         """
         trigger_id = _execute_rest_request(url=f'{self.api_url}/datasets/{dataset_id}', http_method='DELETE',
                                            accepted_status_code=202)['request-id']
-        return DatasetTrigger(prefix=f'{self.api_url}/delete', trigger_id=trigger_id)
+        return DatasetTrigger(prefix=f'{self.api_url}/datasets/delete', trigger_id=trigger_id)
