@@ -1,14 +1,9 @@
 import importlib_resources
-import pytest
 
-from flink_rest_client.v1.client import FlinkRestClientV1
+from tests.v1.test_base import TestBase
 
 
-class TestJarClient:
-
-    @pytest.fixture(scope="class")
-    def simple_client(self):
-        return FlinkRestClientV1("host", 8081)
+class TestJarClient(TestBase):
 
     def test_all(self, simple_client, requests_mock):
         requests_mock.get(f'{simple_client.jars.prefix}', json={

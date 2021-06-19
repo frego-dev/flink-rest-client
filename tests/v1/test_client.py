@@ -1,13 +1,9 @@
-import pytest
 
-from flink_rest_client.v1.client import FlinkRestClientV1, DatasetTrigger
+from flink_rest_client.v1.client import DatasetTrigger
+from tests.v1.test_base import TestBase
 
 
-class TestClientV1:
-
-    @pytest.fixture(scope="class")
-    def simple_client(self):
-        return FlinkRestClientV1("host", 8081)
+class TestClientV1(TestBase):
 
     def test_api_url(self, simple_client):
         assert simple_client.api_url == 'http://host:8081/v1'
