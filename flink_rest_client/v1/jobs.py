@@ -589,7 +589,7 @@ class JobsClient:
         """
         Returns the checkpointing configuration of the selected job_id
 
-        Endpoint: [GET] /jobs/:jobid/checkpoints
+        Endpoint: [GET] /jobs/:jobid/checkpoints/config
 
         Parameters
         ----------
