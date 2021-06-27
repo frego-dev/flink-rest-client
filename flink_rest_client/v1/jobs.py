@@ -712,10 +712,12 @@ class JobsClient:
         Triggers a savepoint, and optionally cancels the job afterwards. This async operation would return a
         JobTrigger for further query identifier.
 
-        Attention: The target directory has to be a location accessible by both the JobManager(s) and TaskManager(s)
-        e.g. a location on a distributed file-system or Object Store.
-
         Endpoint: [GET] /jobs/:jobid/savepoints
+
+        Notes
+        -----
+        The target directory has to be a location accessible by both the JobManager(s) and TaskManager(s)
+        e.g. a location on a distributed file-system or Object Store.
 
         Parameters
         ----------
@@ -745,7 +747,7 @@ class JobsClient:
         """
         Terminates a job.
 
-        Endpoint: [GET] /jobs/:jobid
+        Endpoint: [PATCH] /jobs/:jobid
 
         Parameters
         ----------

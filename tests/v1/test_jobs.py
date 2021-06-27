@@ -1,5 +1,6 @@
 import math
 
+from flink_rest_client.v1.jobs import JobTrigger, JobVertexClient
 from tests.v1.test_base import TestBase
 
 
@@ -292,4 +293,72 @@ class TestJobsClient(TestBase):
         assert response['id'] == cid
         assert len(response['subtasks']) == 1
 
-    # TODO: continue from rescale method
+    def test_rescale(self, simple_client, requests_mock):
+        jid = 'a0d4b5b51065202b788bbd0a80251a3c'
+        tid = 'test_trigger_id'
+        parallelism = 2
+
+        requests_mock.patch(f'{simple_client.jobs.prefix}/{jid}/rescaling', json={
+            'triggerid': tid,
+        })
+
+        response = simple_client.jobs.rescale(jid, parallelism)
+
+        assert isinstance(response, JobTrigger)
+        assert response.trigger_id == tid
+
+    def test_savepoints(self, simple_client, requests_mock):
+        jid = 'a0d4b5b51065202b788bbd0a80251a3c'
+        tid = 'test_trigger_id'
+        path = 'test'
+
+        requests_mock.get(f'{simple_client.jobs.prefix}/{jid}/savepoints/{tid}', json={
+            'status': {'id': 'COMPLETED'},
+            'operation': {'location': 'file:/opt/flink/test/savepoint-0754b5-9e6dc83c00ac'}
+        })
+        requests_mock.post(f'{simple_client.jobs.prefix}/{jid}/savepoints', json={
+            'request-id': tid,
+        }, status_code=202)
+
+        response = simple_client.jobs.create_savepoint(jid, path)
+
+        assert isinstance(response, JobTrigger)
+        assert response.trigger_id == tid
+
+        assert response.status['status']['id'] == 'COMPLETED'
+
+    def test_terminate(self, simple_client, requests_mock):
+        jid = 'a0d4b5b51065202b788bbd0a80251a3c'
+        requests_mock.patch(f'{simple_client.jobs.prefix}/{jid}', json={}, status_code=202)
+        response = simple_client.jobs.terminate(jid)
+        assert response is True
+
+    def test_stop(self, simple_client, requests_mock):
+        jid = 'a0d4b5b51065202b788bbd0a80251a3c'
+        tid = 'test_trigger_id'
+        path = 'test'
+
+        requests_mock.get(f'{simple_client.jobs.prefix}/{jid}/savepoints/{tid}', json={
+            'status': {'id': 'COMPLETED'},
+            'operation': {'location': 'file:/opt/flink/test/savepoint-0754b5-9e6dc83c00ac'}
+        })
+        requests_mock.post(f'{simple_client.jobs.prefix}/{jid}/stop', json={
+            'request-id': tid,
+        }, status_code=202)
+
+        response = simple_client.jobs.stop(jid, path)
+
+        assert isinstance(response, JobTrigger)
+        assert response.trigger_id == tid
+
+        assert response.status['status']['id'] == 'COMPLETED'
+
+    def test_get_vertex(self, simple_client, requests_mock):
+        jid = 'a0d4b5b51065202b788bbd0a80251a3c'
+        vertex_id = 'test_vertex_id'
+
+        response = simple_client.jobs.get_vertex(jid, vertex_id)
+
+        assert isinstance(response, JobVertexClient)
+        assert response.job_id == jid
+        assert response.vertex_id == vertex_id
