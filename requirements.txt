@@ -4,3 +4,6 @@ flit
 
 pytest
 requests-mock
+black
+coverage
+tox

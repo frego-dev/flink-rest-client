@@ -131,3 +131,7 @@ dmypy.json
 .idea/
 
 flinkapidoc.pdf
+
+.coverage
+
+dist

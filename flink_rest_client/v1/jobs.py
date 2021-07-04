@@ -10,7 +10,9 @@ class JobTrigger:
 
     @property
     def status(self):
-        return _execute_rest_request(url=f'{self._prefix}/{self.job_id}/{self._type_name}/{self.trigger_id}')
+        return _execute_rest_request(
+            url=f"{self._prefix}/{self.job_id}/{self._type_name}/{self.trigger_id}"
+        )
 
 
 class JobVertexSubtaskClient:
@@ -38,7 +40,7 @@ class JobVertexSubtaskClient:
         list
             Positive integer list of subtask ids.
         """
-        return [elem['subtask'] for elem in self.accumulators()['subtasks']]
+        return [elem["subtask"] for elem in self.accumulators()["subtasks"]]
 
     def accumulators(self):
         """
@@ -62,7 +64,10 @@ class JobVertexSubtaskClient:
         list
             List of metric names.
         """
-        return [elem['id'] for elem in _execute_rest_request(url=f'{self.prefix_url}/metrics')]
+        return [
+            elem["id"]
+            for elem in _execute_rest_request(url=f"{self.prefix_url}/metrics")
+        ]
 
     def metrics(self, metric_names=None, agg_modes=None, subtask_ids=None):
         """
@@ -93,26 +98,30 @@ class JobVertexSubtaskClient:
         if metric_names is None:
             metric_names = self.metric_names()
 
-        supported_agg_modes = ['min', 'max', 'sum', 'avg']
+        supported_agg_modes = ["min", "max", "sum", "avg"]
         if agg_modes is None:
             agg_modes = supported_agg_modes
         if len(set(agg_modes).difference(set(supported_agg_modes))) > 0:
-            raise RestException(f"The provided aggregation modes list contains invalid value. Supported aggregation "
-                                f"modes: {','.join(supported_agg_modes)}; given list: {','.join(agg_modes)}")
+            raise RestException(
+                f"The provided aggregation modes list contains invalid value. Supported aggregation "
+                f"modes: {','.join(supported_agg_modes)}; given list: {','.join(agg_modes)}"
+            )
 
         if subtask_ids is None:
             subtask_ids = self.subtask_ids()
 
         params = {
-            'get': ','.join(metric_names),
-            'agg': ','.join(agg_modes),
-            'subtasks': ','.join([str(elem) for elem in subtask_ids])
+            "get": ",".join(metric_names),
+            "agg": ",".join(agg_modes),
+            "subtasks": ",".join([str(elem) for elem in subtask_ids]),
         }
-        query_result = _execute_rest_request(url=f'{self.prefix_url}/metrics', params=params)
+        query_result = _execute_rest_request(
+            url=f"{self.prefix_url}/metrics", params=params
+        )
 
         result = {}
         for elem in query_result:
-            metric_name = elem.pop('id')
+            metric_name = elem.pop("id")
             result[metric_name] = elem
 
         return result
@@ -158,7 +167,9 @@ class JobVertexSubtaskClient:
         """
         if attempt_id is None:
             return self.get(subtask_id)
-        return _execute_rest_request(url=f"{self.prefix_url}/{subtask_id}/attempts/{attempt_id}")
+        return _execute_rest_request(
+            url=f"{self.prefix_url}/{subtask_id}/attempts/{attempt_id}"
+        )
 
     def get_attempt_accumulators(self, subtask_id, attempt_id=None):
         """
@@ -181,8 +192,10 @@ class JobVertexSubtaskClient:
             The accumulators of the selected execution attempt of a subtask.
         """
         if attempt_id is None:
-            attempt_id = self.get(subtask_id)['attempt']
-        return _execute_rest_request(url=f"{self.prefix_url}/{subtask_id}/attempts/{attempt_id}/accumulators")
+            attempt_id = self.get(subtask_id)["attempt"]
+        return _execute_rest_request(
+            url=f"{self.prefix_url}/{subtask_id}/attempts/{attempt_id}/accumulators"
+        )
 
 
 class JobVertexClient:
@@ -246,7 +259,10 @@ class JobVertexClient:
         list
             List of metric names.
         """
-        return [elem['id'] for elem in _execute_rest_request(url=f'{self.prefix_url}/metrics')]
+        return [
+            elem["id"]
+            for elem in _execute_rest_request(url=f"{self.prefix_url}/metrics")
+        ]
 
     def metrics(self, metric_names=None):
         """
@@ -262,14 +278,14 @@ class JobVertexClient:
         if metric_names is None:
             metric_names = self.metric_names()
 
-        params = {
-            'get': ','.join(metric_names)
-        }
-        query_result = _execute_rest_request(url=f'{self.prefix_url}/metrics', params=params)
+        params = {"get": ",".join(metric_names)}
+        query_result = _execute_rest_request(
+            url=f"{self.prefix_url}/metrics", params=params
+        )
         result = {}
         for elem in query_result:
-            metric_name = elem.pop('id')
-            result[metric_name] = elem['value']
+            metric_name = elem.pop("id")
+            result[metric_name] = elem["value"]
         return result
 
     def subtasktimes(self):
@@ -322,7 +338,7 @@ class JobsClient:
         prefix: str
             REST API url prefix. It must contain the host, port pair.
         """
-        self.prefix = f'{prefix}/jobs'
+        self.prefix = f"{prefix}/jobs"
 
     def all(self):
         """
@@ -335,7 +351,7 @@ class JobsClient:
         list
             List of jobs and their current state.
         """
-        return _execute_rest_request(url=self.prefix)['jobs']
+        return _execute_rest_request(url=self.prefix)["jobs"]
 
     def job_ids(self):
         """
@@ -346,7 +362,7 @@ class JobsClient:
         list
             List of job ids.
         """
-        return [elem['id'] for elem in self.all()]
+        return [elem["id"] for elem in self.all()]
 
     def overview(self):
         """
@@ -359,7 +375,7 @@ class JobsClient:
         list
             List of existing jobs.
         """
-        return _execute_rest_request(url=f'{self.prefix}/overview')['jobs']
+        return _execute_rest_request(url=f"{self.prefix}/overview")["jobs"]
 
     def metric_names(self):
         """
@@ -370,7 +386,9 @@ class JobsClient:
         list
             List of metric names.
         """
-        return [elem['id'] for elem in _execute_rest_request(url=f'{self.prefix}/metrics')]
+        return [
+            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics")
+        ]
 
     def metrics(self, metric_names=None, agg_modes=None, job_ids=None):
         """
@@ -400,26 +418,30 @@ class JobsClient:
         if metric_names is None:
             metric_names = self.metric_names()
 
-        supported_agg_modes = ['min', 'max', 'sum', 'avg']
+        supported_agg_modes = ["min", "max", "sum", "avg"]
         if agg_modes is None:
             agg_modes = supported_agg_modes
         if len(set(agg_modes).difference(set(supported_agg_modes))) > 0:
-            raise RestException(f"The provided aggregation modes list contains invalid value. Supported aggregation "
-                                f"modes: {','.join(supported_agg_modes)}; given list: {','.join(agg_modes)}")
+            raise RestException(
+                f"The provided aggregation modes list contains invalid value. Supported aggregation "
+                f"modes: {','.join(supported_agg_modes)}; given list: {','.join(agg_modes)}"
+            )
 
         if job_ids is None:
             job_ids = self.job_ids()
 
         params = {
-            'get': ','.join(metric_names),
-            'agg': ','.join(agg_modes),
-            'jobs': ','.join(job_ids)
+            "get": ",".join(metric_names),
+            "agg": ",".join(agg_modes),
+            "jobs": ",".join(job_ids),
         }
-        query_result = _execute_rest_request(url=f'{self.prefix}/metrics', params=params)
+        query_result = _execute_rest_request(
+            url=f"{self.prefix}/metrics", params=params
+        )
 
         result = {}
         for elem in query_result:
-            metric_name = elem.pop('id')
+            metric_name = elem.pop("id")
             result[metric_name] = elem
 
         return result
@@ -440,7 +462,7 @@ class JobsClient:
         dict
             Details of the selected job.
         """
-        return _execute_rest_request(url=f'{self.prefix}/{job_id}')
+        return _execute_rest_request(url=f"{self.prefix}/{job_id}")
 
     def get_config(self, job_id):
         """
@@ -458,7 +480,7 @@ class JobsClient:
         dict
             Job configuration
         """
-        return _execute_rest_request(url=f'{self.prefix}/{job_id}/config')
+        return _execute_rest_request(url=f"{self.prefix}/{job_id}/config")
 
     def get_exceptions(self, job_id):
         """
@@ -476,7 +498,7 @@ class JobsClient:
         dict
             The most recent exceptions.
         """
-        return _execute_rest_request(url=f'{self.prefix}/{job_id}/exceptions')
+        return _execute_rest_request(url=f"{self.prefix}/{job_id}/exceptions")
 
     def get_execution_result(self, job_id):
         """
@@ -495,7 +517,7 @@ class JobsClient:
         dict
             The execution result of the selected job.
         """
-        return _execute_rest_request(url=f'{self.prefix}/{job_id}/execution-result')
+        return _execute_rest_request(url=f"{self.prefix}/{job_id}/execution-result")
 
     def get_metrics(self, job_id, metric_names=None):
         """
@@ -518,11 +540,11 @@ class JobsClient:
         """
         if metric_names is None:
             metric_names = self.metric_names()
-        params = {
-            'get': ','.join(metric_names)
-        }
-        query_result = _execute_rest_request(url=f'{self.prefix}/{job_id}/metrics', params=params)
-        return dict([(elem['id'], elem['value']) for elem in query_result])
+        params = {"get": ",".join(metric_names)}
+        query_result = _execute_rest_request(
+            url=f"{self.prefix}/{job_id}/metrics", params=params
+        )
+        return dict([(elem["id"], elem["value"]) for elem in query_result])
 
     def get_plan(self, job_id):
         """
@@ -540,7 +562,7 @@ class JobsClient:
         dict
             Dataflow plan
         """
-        return _execute_rest_request(url=f'{self.prefix}/{job_id}/plan')['plan']
+        return _execute_rest_request(url=f"{self.prefix}/{job_id}/plan")["plan"]
 
     def get_vertex_ids(self, job_id):
         """
@@ -556,7 +578,7 @@ class JobsClient:
         list
             List of identifiers.
         """
-        return [elem['id'] for elem in self.get(job_id)['vertices']]
+        return [elem["id"] for elem in self.get(job_id)["vertices"]]
 
     def get_accumulators(self, job_id, include_serialized_value=None):
         """
@@ -581,9 +603,13 @@ class JobsClient:
 
         params = {}
         if include_serialized_value is not None:
-            params['includeSerializedValue'] = 'true' if include_serialized_value else 'false'
+            params["includeSerializedValue"] = (
+                "true" if include_serialized_value else "false"
+            )
 
-        return _execute_rest_request(url=f'{self.prefix}/{job_id}/accumulators', http_method="GET", params=params)
+        return _execute_rest_request(
+            url=f"{self.prefix}/{job_id}/accumulators", http_method="GET", params=params
+        )
 
     def get_checkpointing_configuration(self, job_id):
         """
@@ -601,7 +627,9 @@ class JobsClient:
         dict
             Checkpointing configuration of the selected job.
         """
-        return _execute_rest_request(url=f'{self.prefix}/{job_id}/checkpoints/config', http_method="GET")
+        return _execute_rest_request(
+            url=f"{self.prefix}/{job_id}/checkpoints/config", http_method="GET"
+        )
 
     def get_checkpoints(self, job_id):
         """
@@ -619,7 +647,9 @@ class JobsClient:
         dict
             Checkpointing statistics for the selected job: counts, summary, latest and history.
         """
-        return _execute_rest_request(url=f'{self.prefix}/{job_id}/checkpoints', http_method="GET")
+        return _execute_rest_request(
+            url=f"{self.prefix}/{job_id}/checkpoints", http_method="GET"
+        )
 
     def get_checkpoint_ids(self, job_id):
         """
@@ -635,7 +665,7 @@ class JobsClient:
         list
             List of checkpoint ids.
         """
-        return [elem['id'] for elem in self.get_checkpoints(job_id=job_id)['history']]
+        return [elem["id"] for elem in self.get_checkpoints(job_id=job_id)["history"]]
 
     def get_checkpoint_details(self, job_id, checkpoint_id, show_subtasks=False):
         """
@@ -662,17 +692,20 @@ class JobsClient:
         dict
 
         """
-        checkpoint_details = _execute_rest_request(url=f'{self.prefix}/{job_id}/checkpoints/details/{checkpoint_id}',
-                                                   http_method="GET")
+        checkpoint_details = _execute_rest_request(
+            url=f"{self.prefix}/{job_id}/checkpoints/details/{checkpoint_id}",
+            http_method="GET",
+        )
         if not show_subtasks:
             return checkpoint_details
 
         subtasks = {}
-        for vertex_id in checkpoint_details['tasks'].keys():
+        for vertex_id in checkpoint_details["tasks"].keys():
             subtasks[vertex_id] = _execute_rest_request(
-                url=f'{self.prefix}/{job_id}/checkpoints/details/{checkpoint_id}/subtasks/{vertex_id}',
-                http_method="GET")
-        checkpoint_details['subtasks'] = subtasks
+                url=f"{self.prefix}/{job_id}/checkpoints/details/{checkpoint_id}/subtasks/{vertex_id}",
+                http_method="GET",
+            )
+        checkpoint_details["subtasks"] = subtasks
         return checkpoint_details
 
     def rescale(self, job_id, parallelism):
@@ -698,14 +731,11 @@ class JobsClient:
         JobTrigger
             Object that can be used to query the status of rescaling.
         """
-        params = {
-            'parallelism': parallelism
-        }
+        params = {"parallelism": parallelism}
         trigger_id = _execute_rest_request(
-            url=f'{self.prefix}/{job_id}/rescaling',
-            http_method="PATCH",
-            params=params)['triggerid']
-        return JobTrigger(self.prefix, 'rescaling', job_id, trigger_id)
+            url=f"{self.prefix}/{job_id}/rescaling", http_method="PATCH", params=params
+        )["triggerid"]
+        return JobTrigger(self.prefix, "rescaling", job_id, trigger_id)
 
     def create_savepoint(self, job_id, target_directory, cancel_job=False):
         """
@@ -734,14 +764,12 @@ class JobsClient:
             Object that can be used to query the status of savepoint.
         """
         trigger_id = _execute_rest_request(
-            url=f'{self.prefix}/{job_id}/savepoints',
+            url=f"{self.prefix}/{job_id}/savepoints",
             http_method="POST",
             accepted_status_code=202,
-            json={
-                'cancel-job': cancel_job,
-                'target-directory': target_directory
-            })['request-id']
-        return JobTrigger(self.prefix, 'savepoints', job_id, trigger_id)
+            json={"cancel-job": cancel_job, "target-directory": target_directory},
+        )["request-id"]
+        return JobTrigger(self.prefix, "savepoints", job_id, trigger_id)
 
     def terminate(self, job_id):
         """
@@ -759,7 +787,9 @@ class JobsClient:
         bool
             True if the job has been canceled, otherwise False.
         """
-        res = _execute_rest_request(url=f'{self.prefix}/{job_id}', http_method="PATCH", accepted_status_code=202)
+        res = _execute_rest_request(
+            url=f"{self.prefix}/{job_id}", http_method="PATCH", accepted_status_code=202
+        )
         if len(res) < 1:
             return True
         else:
@@ -794,16 +824,17 @@ class JobsClient:
             Object that can be used to query the status of savepoint.
         """
         data = {
-            'drain': False if drain is None else drain,
-            'targetDirectory': target_directory
+            "drain": False if drain is None else drain,
+            "targetDirectory": target_directory,
         }
 
         trigger_id = _execute_rest_request(
-            url=f'{self.prefix}/{job_id}/stop',
+            url=f"{self.prefix}/{job_id}/stop",
             http_method="POST",
             accepted_status_code=202,
-            json=data)['request-id']
-        return JobTrigger(self.prefix, 'savepoints', job_id, trigger_id)
+            json=data,
+        )["request-id"]
+        return JobTrigger(self.prefix, "savepoints", job_id, trigger_id)
 
     def get_vertex(self, job_id, vertex_id):
         """

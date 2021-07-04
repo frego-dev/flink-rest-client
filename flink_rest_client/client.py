@@ -1,9 +1,7 @@
 from flink_rest_client.common import RestException
 from flink_rest_client.v1.client import FlinkRestClientV1
 
-VERSIONS = {
-    "v1": FlinkRestClientV1
-}
+VERSIONS = {"v1": FlinkRestClientV1}
 
 
 class FlinkRestClient:

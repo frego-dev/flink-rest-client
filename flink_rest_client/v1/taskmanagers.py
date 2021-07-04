@@ -11,7 +11,7 @@ class TaskManagersClient:
         prefix: str
             REST API url prefix. It must contain the host, port pair.
         """
-        self.prefix = f'{prefix}/taskmanagers'
+        self.prefix = f"{prefix}/taskmanagers"
 
     def all(self):
         """
@@ -24,7 +24,7 @@ class TaskManagersClient:
         list
             List of taskmanagers. Each taskmanager is represented by a dictionary.
         """
-        return _execute_rest_request(url=self.prefix)['taskmanagers']
+        return _execute_rest_request(url=self.prefix)["taskmanagers"]
 
     def taskmanager_ids(self):
         """
@@ -35,7 +35,7 @@ class TaskManagersClient:
         list
             List of taskmanager ids.
         """
-        return [elem['id'] for elem in self.all()]
+        return [elem["id"] for elem in self.all()]
 
     def metric_names(self):
         """
@@ -46,7 +46,9 @@ class TaskManagersClient:
         list
             List of metric names.
         """
-        return [elem['id'] for elem in _execute_rest_request(url=f'{self.prefix}/metrics')]
+        return [
+            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics")
+        ]
 
     def metrics(self, metric_names=None, agg_modes=None, taskmanager_ids=None):
         """
@@ -77,26 +79,30 @@ class TaskManagersClient:
         if metric_names is None:
             metric_names = self.metric_names()
 
-        supported_agg_modes = ['min', 'max', 'sum', 'avg']
+        supported_agg_modes = ["min", "max", "sum", "avg"]
         if agg_modes is None:
             agg_modes = supported_agg_modes
         if len(set(agg_modes).difference(set(supported_agg_modes))) > 0:
-            raise RestException(f"The provided aggregation modes list contains invalid value. Supported aggregation "
-                                f"modes: {','.join(supported_agg_modes)}; given list: {','.join(agg_modes)}")
+            raise RestException(
+                f"The provided aggregation modes list contains invalid value. Supported aggregation "
+                f"modes: {','.join(supported_agg_modes)}; given list: {','.join(agg_modes)}"
+            )
 
         if taskmanager_ids is None:
             taskmanager_ids = self.taskmanager_ids()
 
         params = {
-            'get': ','.join(metric_names),
-            'agg': ','.join(agg_modes),
-            'taskmanagers': ','.join(taskmanager_ids)
+            "get": ",".join(metric_names),
+            "agg": ",".join(agg_modes),
+            "taskmanagers": ",".join(taskmanager_ids),
         }
-        query_result = _execute_rest_request(url=f'{self.prefix}/metrics', params=params)
+        query_result = _execute_rest_request(
+            url=f"{self.prefix}/metrics", params=params
+        )
 
         result = {}
         for elem in query_result:
-            metric_name = elem.pop('id')
+            metric_name = elem.pop("id")
             result[metric_name] = elem
 
         return result
@@ -117,7 +123,7 @@ class TaskManagersClient:
         dict
             Query result as a dict.
         """
-        return _execute_rest_request(url=f'{self.prefix}/{taskmanager_id}')
+        return _execute_rest_request(url=f"{self.prefix}/{taskmanager_id}")
 
     def get_logs(self, taskmanager_id):
         """
@@ -135,7 +141,7 @@ class TaskManagersClient:
         list
             List of log files in which each element contains a name and size fields.
         """
-        return _execute_rest_request(url=f'{self.prefix}/{taskmanager_id}/logs')['logs']
+        return _execute_rest_request(url=f"{self.prefix}/{taskmanager_id}/logs")["logs"]
 
     def get_metrics(self, taskmanager_id, metric_names=None):
         """
@@ -159,10 +165,12 @@ class TaskManagersClient:
 
         if metric_names is None:
             metric_names = self.metric_names()
-        params = {'get': ','.join(metric_names)}
+        params = {"get": ",".join(metric_names)}
 
-        query_result = _execute_rest_request(url=f'{self.prefix}/{taskmanager_id}/metrics', params=params)
-        return dict([(elem['id'], elem['value']) for elem in query_result])
+        query_result = _execute_rest_request(
+            url=f"{self.prefix}/{taskmanager_id}/metrics", params=params
+        )
+        return dict([(elem["id"], elem["value"]) for elem in query_result])
 
     def get_thread_dump(self, taskmanager_id):
         """
@@ -180,5 +188,12 @@ class TaskManagersClient:
         dict
             ThreadName -> StringifiedThreadInfo key-value pairs.
         """
-        query_result = _execute_rest_request(url=f'{self.prefix}/{taskmanager_id}/thread-dump')['threadInfos']
-        return dict([(elem['threadName'], elem['stringifiedThreadInfo']) for elem in query_result])
+        query_result = _execute_rest_request(
+            url=f"{self.prefix}/{taskmanager_id}/thread-dump"
+        )["threadInfos"]
+        return dict(
+            [
+                (elem["threadName"], elem["stringifiedThreadInfo"])
+                for elem in query_result
+            ]
+        )

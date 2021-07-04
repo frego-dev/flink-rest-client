@@ -12,18 +12,17 @@ class DatasetTrigger:
 
     @property
     def status(self):
-        return _execute_rest_request(url=f'{self._prefix}/{self.trigger_id}')
+        return _execute_rest_request(url=f"{self._prefix}/{self.trigger_id}")
 
 
 class FlinkRestClientV1:
-
     def __init__(self, host, port):
         self.host = host
         self.port = port
 
     @property
     def api_url(self):
-        return f'http://{self.host}:{str(self.port)}/v1'
+        return f"http://{self.host}:{str(self.port)}/v1"
 
     @property
     def jobmanager(self):
@@ -52,7 +51,7 @@ class FlinkRestClientV1:
         dict
             Key-value pairs of flink cluster infos.
         """
-        return _execute_rest_request(url=f'{self.api_url}/overview')
+        return _execute_rest_request(url=f"{self.api_url}/overview")
 
     def config(self):
         """
@@ -65,7 +64,7 @@ class FlinkRestClientV1:
         dict
             Query result as a dict.
         """
-        return _execute_rest_request(url=f'{self.api_url}/config', http_method='GET')
+        return _execute_rest_request(url=f"{self.api_url}/config", http_method="GET")
 
     def delete_cluster(self):
         """
@@ -78,7 +77,9 @@ class FlinkRestClientV1:
         dict
             Result of delete operation.
         """
-        return _execute_rest_request(url=f'{self.api_url}/cluster', http_method='DELETE')
+        return _execute_rest_request(
+            url=f"{self.api_url}/cluster", http_method="DELETE"
+        )
 
     def datasets(self):
         """
@@ -91,7 +92,9 @@ class FlinkRestClientV1:
         list
             Query result as a list of datasets.
         """
-        return _execute_rest_request(url=f'{self.api_url}/datasets', http_method='GET')['dataSets']
+        return _execute_rest_request(url=f"{self.api_url}/datasets", http_method="GET")[
+            "dataSets"
+        ]
 
     def delete_dataset(self, dataset_id):
         """
@@ -110,6 +113,11 @@ class FlinkRestClientV1:
         DatasetTrigger
             Object that can be used to query the status of delete operation.
         """
-        trigger_id = _execute_rest_request(url=f'{self.api_url}/datasets/{dataset_id}', http_method='DELETE',
-                                           accepted_status_code=202)['request-id']
-        return DatasetTrigger(prefix=f'{self.api_url}/datasets/delete', trigger_id=trigger_id)
+        trigger_id = _execute_rest_request(
+            url=f"{self.api_url}/datasets/{dataset_id}",
+            http_method="DELETE",
+            accepted_status_code=202,
+        )["request-id"]
+        return DatasetTrigger(
+            prefix=f"{self.api_url}/datasets/delete", trigger_id=trigger_id
+        )

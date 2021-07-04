@@ -14,7 +14,7 @@ class JarsClient:
         prefix: str
             REST API url prefix. It must contain the host, port pair.
         """
-        self.prefix = f'{prefix}/jars'
+        self.prefix = f"{prefix}/jars"
 
     def all(self):
         """
@@ -48,9 +48,11 @@ class JarsClient:
         """
         filename = os.path.basename(path_to_jar)
         files = {
-            'file': (filename, (open(path_to_jar, 'rb')), 'application/x-java-archive')
+            "file": (filename, (open(path_to_jar, "rb")), "application/x-java-archive")
         }
-        return _execute_rest_request(url=f'{self.prefix}/upload', http_method='POST', files=files)
+        return _execute_rest_request(
+            url=f"{self.prefix}/upload", http_method="POST", files=files
+        )
 
     def get_plan(self, jar_id):
         """
@@ -74,10 +76,19 @@ class JarsClient:
         RestException
             If the jar_id does not exist.
         """
-        return _execute_rest_request(url=f'{self.prefix}/{jar_id}/plan', http_method='POST')['plan']
+        return _execute_rest_request(
+            url=f"{self.prefix}/{jar_id}/plan", http_method="POST"
+        )["plan"]
 
-    def run(self, jar_id, arguments=None, entry_class=None, parallelism=None, savepoint_path=None,
-            allow_non_restored_state=None):
+    def run(
+        self,
+        jar_id,
+        arguments=None,
+        entry_class=None,
+        parallelism=None,
+        savepoint_path=None,
+        allow_non_restored_state=None,
+    ):
         """
         Submits a job by running a jar previously uploaded via '/jars/upload'.
 
@@ -118,22 +129,33 @@ class JarsClient:
         """
         data = {}
         if arguments is not None:
-            data['programArgs'] = " ".join([f"--{k} {v}" for k, v in arguments.items()])
+            data["programArgs"] = " ".join([f"--{k} {v}" for k, v in arguments.items()])
         if entry_class is not None:
-            data['entry-class'] = entry_class
+            data["entry-class"] = entry_class
         if parallelism is not None:
             if parallelism < 0:
-                raise RestException("get_plan method's parallelism parameter must be a positive integer.")
-            data['parallelism'] = parallelism
+                raise RestException(
+                    "get_plan method's parallelism parameter must be a positive integer."
+                )
+            data["parallelism"] = parallelism
         if savepoint_path is not None:
-            data['savepointPath'] = savepoint_path
+            data["savepointPath"] = savepoint_path
         if allow_non_restored_state is not None:
-            data['allowNonRestoredState'] = allow_non_restored_state
+            data["allowNonRestoredState"] = allow_non_restored_state
 
-        return _execute_rest_request(url=f'{self.prefix}/{jar_id}/run', http_method='POST', json=data)['jobid']
+        return _execute_rest_request(
+            url=f"{self.prefix}/{jar_id}/run", http_method="POST", json=data
+        )["jobid"]
 
-    def upload_and_run(self, path_to_jar, arguments=None, entry_class=None, parallelism=None, savepoint_path=None,
-                       allow_non_restored_state=None):
+    def upload_and_run(
+        self,
+        path_to_jar,
+        arguments=None,
+        entry_class=None,
+        parallelism=None,
+        savepoint_path=None,
+        allow_non_restored_state=None,
+    ):
         """
         Helper method to upload and start a jar in one method call.
 
@@ -170,12 +192,17 @@ class JarsClient:
             If an error occurred during the upload of jar file.
         """
         result = self.upload(path_to_jar=path_to_jar)
-        if not result['status'] == 'success':
-            raise RestException('Could not upload the input jar file.', result)
+        if not result["status"] == "success":
+            raise RestException("Could not upload the input jar file.", result)
 
-        return self.run(ntpath.basename(result['filename']), arguments=arguments, entry_class=entry_class,
-                        parallelism=parallelism, savepoint_path=savepoint_path,
-                        allow_non_restored_state=allow_non_restored_state)
+        return self.run(
+            ntpath.basename(result["filename"]),
+            arguments=arguments,
+            entry_class=entry_class,
+            parallelism=parallelism,
+            savepoint_path=savepoint_path,
+            allow_non_restored_state=allow_non_restored_state,
+        )
 
     def delete(self, jar_id):
         """
@@ -199,7 +226,7 @@ class JarsClient:
         RestException
             If the jar_id does not exist.
         """
-        res = _execute_rest_request(url=f'{self.prefix}/{jar_id}', http_method='DELETE')
+        res = _execute_rest_request(url=f"{self.prefix}/{jar_id}", http_method="DELETE")
         if len(res.keys()) < 1:
             return True
         else:
