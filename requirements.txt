@@ -1,6 +1,10 @@
 requests~=2.25.1
 importlib_resources
-flit
+sphinx
+sphinxcontrib-napoleon
+sphinxcontrib-bibtex
+sphinxcontrib-versioning
+sphinx-rtd-theme
 
 pytest
 requests-mock
