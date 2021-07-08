@@ -28,7 +28,7 @@ The official documentation is hosted on: [flink_rest_client.frego.dev](https://f
 ## API structure
 
 In the client implementation, the API end points are categorized based on their functionality:
- - client: API endpoints for managing the whole cluster.
+ - cluster level: API endpoints for managing the whole cluster.
  - jobmanager: API endpoints for managing the job manager(s).
  - taskmanager: API endpoints for managing the taskmanagers.
  - jars: API endpoints for managing the uploaded jars.
@@ -150,7 +150,7 @@ public class MyFlinkJob {
     private static final String PARAM_THRESHOLD = "my.flink.job.threshold";
     
     public static void main(String[] args) {
-        // Reading confoguration
+        // Reading configuration
         ParameterTool argsParams = ParameterTool.fromArgs(args);
         int threshold = argsParams.getInt(PARAM_THRESHOLD);
 

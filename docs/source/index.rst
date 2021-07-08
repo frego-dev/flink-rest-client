@@ -13,13 +13,9 @@ Using this client, you can easily query your Flink cluster status, or you can up
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Table of contents
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   installation
+   endpoint_mapping
+   usage_examples
+   api/modules
