@@ -101,7 +101,7 @@ class JarsClient:
             This value is equivalent to the `id` field in the list of uploaded jars.
 
         arguments: dict
-            (Optional) Comma-separated list of program arguments.
+            (Optional) Dict of program arguments.
 
         entry_class: str
             (Optional) String value that specifies the fully qualified name of the entry point class. Overrides the
