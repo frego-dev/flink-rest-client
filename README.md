@@ -25,8 +25,18 @@ The official documentation is hosted on: [flink_rest_client.frego.dev](https://f
 
 [MIT](https://github.com/frego-dev/flink-rest-client/blob/master/LICENSE)
 
-## Usage examples
+## API structure
 
+In the client implementation, the API end points are categorized based on their functionality:
+ - client: API endpoints for managing the whole cluster.
+ - jobmanager: API endpoints for managing the job manager(s).
+ - taskmanager: API endpoints for managing the taskmanagers.
+ - jars: API endpoints for managing the uploaded jars.
+ - jobs: API endpoints for managing the submitted jobs.
+
+You find the REST API endpoint -> python method mapping in the documentation: [link to mapping]
+
+## Usage examples
 
 ### How to create a new FlinkRestClient instance
 The simplest way to create a new FlinkRestClient instance is using its static factory method:
