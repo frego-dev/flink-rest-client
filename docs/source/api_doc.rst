@@ -1,8 +1,28 @@
-flink\_rest\_client.v1 package
-==============================
+Python API documentation
+==========================
 
-Submodules
-----------
+common
+********
+
+flink\_rest\_client.client module
+---------------------------------
+
+.. automodule:: flink_rest_client.client
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+flink\_rest\_client.common module
+---------------------------------
+
+.. automodule:: flink_rest_client.common
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+version 1
+***********
 
 flink\_rest\_client.v1.client module
 ------------------------------------
@@ -51,3 +71,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+

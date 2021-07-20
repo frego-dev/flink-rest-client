@@ -18,4 +18,4 @@ Using this client, you can easily query your Flink cluster status, or you can up
    installation
    endpoint_mapping
    usage_examples
-   api/modules
+   api_doc

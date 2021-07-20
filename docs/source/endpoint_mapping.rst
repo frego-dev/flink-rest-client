@@ -141,3 +141,54 @@ Jobs
 +-------------------------------------------------------------------+-------------+--------------------------------------------------+
 | /jobs/:jobid/stop                                                 | GET         | rest_client.jobs.stop                            |
 +-------------------------------------------------------------------+-------------+--------------------------------------------------+
+
+Information about jobs' vertices can be queried via :code:`rest_client.jobs.get_vertex`:
+
+.. code-block:: python
+
+    from flink_rest_client import FlinkRestClient
+
+    rest_client = FlinkRestClient.get(host="localhost", port=8082)
+
+    # We already uploaded and started a job and we also received a valid job_id
+    job_id = rest_client.jars.upload_and_run(path_to_jar=path_to_my_jar)
+
+    # Listing the vertex ids that belongs to the job.
+    job_vertex_ids = rest_client.jobs.get_vertex_ids(job_id=job_id)
+
+    # Getting the first job_vertex via get_vertex method
+    job_vertex = rest_client.jobs.get_vertex(job_id=job_id, vertex_id=job_vertex_ids[0])
+
+
++----------------------------------------------+-------------+-------------------------+
+| REST API endpoint                            | HTTP method | Python method           |
++==============================================+=============+=========================+
+| /jobs/:jobid/vertices/:vertexid              | GET         | job_vertex.details      |
++----------------------------------------------+-------------+-------------------------+
+| /jobs/:jobid/vertices/:vertexid/backpressure | GET         | job_vertex.backpressure |
++----------------------------------------------+-------------+-------------------------+
+| /jobs/:jobid/vertices/:vertexid/metrics      | GET         | job_vertex.metrics      |
++----------------------------------------------+-------------+-------------------------+
+| /jobs/:jobid/vertices/:vertexid/subtasktimes | GET         | job_vertex.subtasktimes |
++----------------------------------------------+-------------+-------------------------+
+| /jobs/:jobid/vertices/:vertexid/taskmanagers | GET         | job_vertex.taskmanagers |
++----------------------------------------------+-------------+-------------------------+
+| /jobs/:jobid/vertices/:vertexid/watermarks   | GET         | job_vertex.watermarks   |
++----------------------------------------------+-------------+-------------------------+
+
+The job vertex substasks are accessible via :code:`job_vertex.subtasks` property:
+
++--------------------------------------------------------------------------+-------------+----------------------------------------------+
+| REST API endpoint                                                        | HTTP method | Python method                                |
++==========================================================================+=============+==============================================+
+| /jobs/:jobid/vertices/:vertexid/accumulators                             | GET         | job_vertex.subtasks.accumulators             |
++--------------------------------------------------------------------------+-------------+----------------------------------------------+
+| /jobs/:jobid/vertices/:vertexid/subtasks/metrics                         | GET         | job_vertex.subtasks.metrics                  |
++--------------------------------------------------------------------------+-------------+----------------------------------------------+
+| /jobs/:jobid/vertices/:vertexid/subtasks/:subtaskindex                   | GET         | job_vertex.subtasks.get                      |
++--------------------------------------------------------------------------+-------------+----------------------------------------------+
+| /jobs/:jobid/vertices/:vertexid/subtasks/:subtaskindex/attempts/:attempt | GET         | job_vertex.subtasks.get_attempt              |
++--------------------------------------------------------------------------+-------------+----------------------------------------------+
+| /jobs/:jobid/vertices/:vertexid/subtasks/accumulators                    | GET         | job_vertex.subtasks.get_attempt_accumulators |
++--------------------------------------------------------------------------+-------------+----------------------------------------------+
+
