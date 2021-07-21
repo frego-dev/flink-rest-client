@@ -1,0 +1,13 @@
+requests~=2.25.1
+importlib_resources
+sphinx
+sphinxcontrib-napoleon
+sphinxcontrib-bibtex
+sphinxcontrib-versioning
+sphinx-rtd-theme
+
+pytest
+requests-mock
+black
+coverage
+tox
