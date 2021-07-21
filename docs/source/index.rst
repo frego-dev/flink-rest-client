@@ -7,7 +7,7 @@ Welcome to Flink REST Client's documentation!
 =============================================
 
 The Flink REST Client provides an easy-to-use python API for Flink REST API.
-The client implements all available REST API endpoints that are documented on the _(official Flink site)[https://ci.apache.org/projects/flink/flink-docs-release-1.13/docs/ops/rest_api/].
+The client implements all available REST API endpoints that are documented on the `official Flink site<https://ci.apache.org/projects/flink/flink-docs-release-1.13/docs/ops/rest_api/>`_.
 Using this client, you can easily query your Flink cluster status, or you can upload and run arbitrary Flink jobs wrapped in a Java archive file.
 
 
