@@ -11,6 +11,7 @@ setup(
     version='1.0.1',
     description='Easy to use Flink REST API client implementation',
     long_description=readme(),
+    long_description_content_type='text/markdown',
     url='https://github.com/frego-dev/flink-rest-client',
     author='Attila Nagy',
     author_email='anagy@frego.dev',
