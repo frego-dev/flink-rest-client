@@ -58,4 +58,4 @@ jobs:
       - name: Publish
         run: |
           python setup.py sdist bdist_wheel
-          twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} --repository-url https://upload.pypi.org/legacy/ dist/*
+          twine upload -u ${{ secrets.PYPI_USERNAME }} -p "${{ secrets.PYPI_PASSWORD }}" --repository-url https://upload.pypi.org/legacy/ dist/*
