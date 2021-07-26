@@ -1,9 +1,16 @@
 from setuptools import setup, find_packages
 
+
+def readme():
+    with open('README.md') as f:
+        return f.read()
+
+
 setup(
     name='flink-rest-client',
-    version='1.0.0',
+    version='1.0.1',
     description='Easy to use Flink REST API client implementation',
+    long_description=readme(),
     url='https://github.com/frego-dev/flink-rest-client',
     author='Attila Nagy',
     author_email='anagy@frego.dev',
