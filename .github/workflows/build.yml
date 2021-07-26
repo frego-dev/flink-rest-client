@@ -47,7 +47,8 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
         if: contains(env.USING_COVERAGE, matrix.python-version)
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
