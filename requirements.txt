@@ -11,3 +11,4 @@ requests-mock
 black
 coverage
 tox
+tox-gh-actions
