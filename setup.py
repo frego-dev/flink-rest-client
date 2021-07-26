@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='flink-rest-client',
-    version='0.3.0',
+    version='1.0.0',
     description='Easy to use Flink REST API client implementation',
     url='https://github.com/frego-dev/flink-rest-client',
     author='Attila Nagy',

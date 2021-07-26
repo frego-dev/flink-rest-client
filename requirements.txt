@@ -12,3 +12,6 @@ black
 coverage
 tox
 tox-gh-actions
+
+twine
+wheel
