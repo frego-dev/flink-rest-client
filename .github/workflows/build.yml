@@ -54,3 +54,9 @@ jobs:
           files: .coverage
           fail_ci_if_error: true
           verbose: true
+          
+      - name: Publish
+        if: contains(env.USING_COVERAGE, matrix.python-version)
+        run: |
+          python setup.py sdist bdist_wheel
+          twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} --repository-url https://upload.pypi.org/legacy/ dist/*
