@@ -54,3 +54,8 @@ jobs:
           files: .coverage
           fail_ci_if_error: true
           verbose: true
+          
+      - name: Publish
+        run: |
+          python setup.py sdist bdist_wheel
+          twine upload dist/* -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }}
