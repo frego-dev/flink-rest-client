@@ -4,13 +4,11 @@
 [![Build Status][build-image]][build-url]
 [![Code Coverage][coverage-image]][coverage-url]
 
-<!-- Badges -->
-
 [pypi-image]: https://img.shields.io/pypi/v/flink_rest_client
 [pypi-url]: https://pypi.org/project/flink_rest_client/
 [build-image]: https://github.com/frego-dev/flink-rest-client/actions/workflows/build.yml/badge.svg
 [build-url]: https://github.com/frego-dev/flink-rest-client/actions/workflows/build.yml
-[coverage-image]: https://codecov.io/gh/frego-dev/flink-rest-client/branch/main/graph/badge.svg
+[coverage-image]: https://codecov.io/gh/frego-dev/flink-rest-client/branch/master/graph/badge.svg?token=OHRAGS8A40
 [coverage-url]: https://codecov.io/gh/frego-dev/flink-rest-client
 
 ## What is it?
