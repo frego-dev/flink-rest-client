@@ -8,7 +8,7 @@ def readme():
 
 setup(
     name='flink-rest-client',
-    version='1.0.3',
+    version='1.0.4',
     description='Easy to use Flink REST API client implementation',
     long_description=readme(),
     long_description_content_type='text/markdown',
