@@ -44,6 +44,7 @@ jobs:
       - name: Run tox
         run: |
           python -m tox
+          pytest --cov=./ --cov-report=xml
 
       # Runs a set of commands using the runners shell
       - name: Upload coverage to Codecov
@@ -51,8 +52,12 @@ jobs:
         if: contains(env.USING_COVERAGE, matrix.python-version)
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: .coverage
+          directory: ./coverage/reports/
           fail_ci_if_error: true
+          files: ./coverage1.xml
+          flags: unittests
+          name: codecov-umbrella
+          path_to_write_report: ./coverage/codecov_report.txt
           verbose: true
           
       - name: Publish

@@ -7,6 +7,7 @@ sphinxcontrib-versioning
 sphinx-rtd-theme
 
 pytest
+pytest-cov
 requests-mock
 black
 coverage
