@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Usage examples &mdash; flink-rest-client v1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Python API documentation" href="api_doc.html" />
+    <link rel="prev" title="API endpoint mapping" href="endpoint_mapping.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> flink-rest-client
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Table of contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="endpoint_mapping.html">API endpoint mapping</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-create-a-new-flinkrestclient-instance">How to create a new FlinkRestClient instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-upload-and-run-a-flink-job">How to upload and run a Flink job</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_doc.html">Python API documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">flink-rest-client</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Usage examples</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/usage_examples.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="usage-examples">
+<h1>Usage examples<a class="headerlink" href="#usage-examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="how-to-create-a-new-flinkrestclient-instance">
+<h2>How to create a new FlinkRestClient instance<a class="headerlink" href="#how-to-create-a-new-flinkrestclient-instance" title="Permalink to this headline">¶</a></h2>
+<p>The simplest way to create a new FlinkRestClient instance is using its static factory method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flink_rest_client</span> <span class="kn">import</span> <span class="n">FlinkRestClient</span>
+
+<span class="n">rest_client</span> <span class="o">=</span> <span class="n">FlinkRestClient</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8082</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To check that the client can connect to Flink Jobmanager’s webserver the overview method can be used, which returns an
+overview over the Flink cluster.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flink_rest_client</span> <span class="kn">import</span> <span class="n">FlinkRestClient</span>
+
+<span class="n">rest_client</span> <span class="o">=</span> <span class="n">FlinkRestClient</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8082</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">rest_client</span><span class="o">.</span><span class="n">overview</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output:</strong></p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="s2">&quot;taskmanagers&quot;</span><span class="o">:</span> <span class="mf">1</span><span class="p">,</span>
+ <span class="s2">&quot;slots-total&quot;</span><span class="o">:</span> <span class="mf">4</span><span class="p">,</span>
+ <span class="s2">&quot;slots-available&quot;</span><span class="o">:</span> <span class="mf">4</span><span class="p">,</span>
+ <span class="s2">&quot;jobs-running&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+ <span class="s2">&quot;jobs-finished&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+ <span class="s2">&quot;jobs-cancelled&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+ <span class="s2">&quot;jobs-failed&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+ <span class="s2">&quot;flink-version&quot;</span><span class="o">:</span> <span class="s2">&quot;1.12.4&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;flink-commit&quot;</span><span class="o">:</span> <span class="s2">&quot;5364a6b&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-upload-and-run-a-flink-job">
+<h2>How to upload and run a Flink job<a class="headerlink" href="#how-to-upload-and-run-a-flink-job" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flink_rest_client</span> <span class="kn">import</span> <span class="n">FlinkRestClient</span>
+
+<span class="n">rest_client</span> <span class="o">=</span> <span class="n">FlinkRestClient</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8082</span><span class="p">)</span>
+
+<span class="c1"># Path to the jar file on your file system</span>
+<span class="n">path_to_my_jar</span> <span class="o">=</span> <span class="s2">&quot;/path/to/StateMachineExample.jar&quot;</span>
+
+<span class="c1"># The upload_and_run method returns with the unique identifier of the already started Flink job</span>
+<span class="n">job_id</span> <span class="o">=</span> <span class="n">rest_client</span><span class="o">.</span><span class="n">jars</span><span class="o">.</span><span class="n">upload_and_run</span><span class="p">(</span><span class="n">path_to_jar</span><span class="o">=</span><span class="n">path_to_my_jar</span><span class="p">)</span>
+
+<span class="c1"># Using the job_id, you can query the current status of the submitted job.</span>
+<span class="n">job</span> <span class="o">=</span> <span class="n">rest_client</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output:</strong></p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="s2">&quot;jid&quot;</span><span class="o">:</span> <span class="s2">&quot;d8a3c7f257231678c1ca4b97d2316c45&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;State machine job&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;isStoppable&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+ <span class="s2">&quot;state&quot;</span><span class="o">:</span> <span class="s2">&quot;RUNNING&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;start-time&quot;</span><span class="o">:</span> <span class="mf">1625758267958</span><span class="p">,</span>
+ <span class="s2">&quot;end-time&quot;</span><span class="o">:</span> <span class="o">-</span><span class="mf">1</span><span class="p">,</span>
+ <span class="s2">&quot;duration&quot;</span><span class="o">:</span> <span class="mf">206345</span><span class="p">,</span>
+ <span class="s2">&quot;now&quot;</span><span class="o">:</span> <span class="mf">1625758474303</span><span class="p">,</span>
+ <span class="s2">&quot;timestamps&quot;</span><span class="o">:</span> <span class="p">{</span>
+  <span class="s2">&quot;FAILING&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;FINISHED&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;INITIALIZING&quot;</span><span class="o">:</span> <span class="mf">1625758267958</span><span class="p">,</span>
+  <span class="s2">&quot;RESTARTING&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;CREATED&quot;</span><span class="o">:</span> <span class="mf">1625758268002</span><span class="p">,</span>
+  <span class="s2">&quot;FAILED&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;SUSPENDED&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;CANCELLING&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;CANCELED&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;RECONCILING&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;RUNNING&quot;</span><span class="o">:</span> <span class="mf">1625758268038</span>
+ <span class="p">},</span>
+ <span class="s2">&quot;vertices&quot;</span><span class="o">:</span> <span class="p">[</span>
+   <span class="p">...</span>
+ <span class="p">],</span>
+ <span class="s2">&quot;status-counts&quot;</span><span class="o">:</span> <span class="p">{</span>
+  <span class="s2">&quot;CREATED&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;CANCELING&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;FAILED&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;CANCELED&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;FINISHED&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;SCHEDULED&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;RUNNING&quot;</span><span class="o">:</span> <span class="mf">2</span><span class="p">,</span>
+  <span class="s2">&quot;DEPLOYING&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+  <span class="s2">&quot;RECONCILING&quot;</span><span class="o">:</span> <span class="mf">0</span>
+ <span class="p">},</span>
+ <span class="s2">&quot;plan&quot;</span><span class="o">:</span> <span class="p">{</span>
+  <span class="s2">&quot;jid&quot;</span><span class="o">:</span> <span class="s2">&quot;d8a3c7f257231678c1ca4b97d2316c45&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;State machine job&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;nodes&quot;</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">...</span>
+   <span class="p">]</span>
+ <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Sometimes you need to pass arguments/parameters to successfully start your Flink job.</p>
+<p>For example, you have the following Java Main class:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">org.apache.flink.api.java.utils.ParameterTool</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.streaming.api.environment.StreamExecutionEnvironment</span><span class="p">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyFlinkJob</span> <span class="p">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">PARAM_THRESHOLD</span> <span class="o">=</span> <span class="s">&quot;my.flink.job.threshold&quot;</span><span class="p">;</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Reading configuration</span>
+        <span class="n">ParameterTool</span> <span class="n">argsParams</span> <span class="o">=</span> <span class="n">ParameterTool</span><span class="p">.</span><span class="na">fromArgs</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">threshold</span> <span class="o">=</span> <span class="n">argsParams</span><span class="p">.</span><span class="na">getInt</span><span class="p">(</span><span class="n">PARAM_THRESHOLD</span><span class="p">);</span>
+
+        <span class="kd">final</span> <span class="n">StreamExecutionEnvironment</span> <span class="n">env</span> <span class="o">=</span> <span class="n">StreamExecutionEnvironment</span><span class="p">.</span><span class="na">getExecutionEnvironment</span><span class="p">();</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The required argument can be passed via upload_and_run method’s <cite>arguments</cite> parameter:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flink_rest_client</span> <span class="kn">import</span> <span class="n">FlinkRestClient</span>
+
+<span class="n">rest_client</span> <span class="o">=</span> <span class="n">FlinkRestClient</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8082</span><span class="p">)</span>
+
+<span class="c1"># Path to the jar file on your file system</span>
+<span class="n">path_to_my_jar</span> <span class="o">=</span> <span class="s2">&quot;/path/to/StateMachineExample.jar&quot;</span>
+
+<span class="c1"># Put the arguments in a dictionary</span>
+<span class="n">job_id</span> <span class="o">=</span> <span class="n">rest_client</span><span class="o">.</span><span class="n">jars</span><span class="o">.</span><span class="n">upload_and_run</span><span class="p">(</span><span class="n">path_to_jar</span><span class="o">=</span><span class="n">path_to_my_jar</span><span class="p">,</span> <span class="n">arguments</span><span class="o">=</span><span class="p">{</span>
+    <span class="s2">&quot;my.flink.job.threshold&quot;</span><span class="p">:</span> <span class="mi">55</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="api_doc.html" class="btn btn-neutral float-right" title="Python API documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="endpoint_mapping.html" class="btn btn-neutral float-left" title="API endpoint mapping" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, frego.dev.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

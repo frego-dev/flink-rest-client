@@ -1,0 +1,579 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>API endpoint mapping &mdash; flink-rest-client v1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage examples" href="usage_examples.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> flink-rest-client
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Table of contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API endpoint mapping</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cluster-level">Cluster level</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jobmanager">Jobmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#taskmanager">Taskmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jars">Jars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jobs">Jobs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_doc.html">Python API documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">flink-rest-client</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>API endpoint mapping</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/endpoint_mapping.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api-endpoint-mapping">
+<h1>API endpoint mapping<a class="headerlink" href="#api-endpoint-mapping" title="Permalink to this headline">¶</a></h1>
+<p>In the client implementation, the API end points are categorized based on their functionality:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>cluster level: API endpoints for managing the whole cluster.</p></li>
+<li><p>jobmanager: API endpoints for managing the job manager(s).</p></li>
+<li><p>taskmanager: API endpoints for managing the taskmanagers.</p></li>
+<li><p>jars: API endpoints for managing the uploaded jars.</p></li>
+<li><p>jobs: API endpoints for managing the submitted jobs.</p></li>
+</ul>
+</div></blockquote>
+<p>You can find the original REST API documentation here: <a class="reference external" href="https://ci.apache.org/projects/flink/flink-docs-release-1.13/docs/ops/rest_api/">REST API documentation</a></p>
+<p>In the following sections we provide the REST API endpoint -&gt; python method mapping.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flink_rest_client</span> <span class="kn">import</span> <span class="n">FlinkRestClient</span>
+
+<span class="n">rest_client</span> <span class="o">=</span> <span class="n">FlinkRestClient</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8082</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="cluster-level">
+<h2>Cluster level<a class="headerlink" href="#cluster-level" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 21%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>REST API endpoint</p></th>
+<th class="head"><p>HTTP method</p></th>
+<th class="head"><p>Python method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>/overview</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.overview</p></td>
+</tr>
+<tr class="row-odd"><td><p>/config</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.config</p></td>
+</tr>
+<tr class="row-even"><td><p>/cluster</p></td>
+<td><p>DELETE</p></td>
+<td><p>rest_client.delete_cluster</p></td>
+</tr>
+<tr class="row-odd"><td><p>/datasets</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.datasets</p></td>
+</tr>
+<tr class="row-even"><td><p>/datasets/:datasetid</p></td>
+<td><p>DELETE</p></td>
+<td><p>rest_client.delete_dataset</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="jobmanager">
+<h2>Jobmanager<a class="headerlink" href="#jobmanager" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 18%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>REST API endpoint</p></th>
+<th class="head"><p>HTTP method</p></th>
+<th class="head"><p>Python method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>/jobmanager/config</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobmanager.config</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobmanager/logs</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobmanager.logs</p></td>
+</tr>
+<tr class="row-even"><td><p>/jobmanager/logs/:log_file</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobmanager.get_log</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobmanager/metrics</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobmanager.metrics</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="code docutils literal notranslate"><span class="pre">[GET]</span> <span class="pre">/jobmanager/logs/:log_file</span></code> end point is not part of the official API documentation.</p>
+</div>
+</div>
+<div class="section" id="taskmanager">
+<h2>Taskmanager<a class="headerlink" href="#taskmanager" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 14%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>REST API endpoint</p></th>
+<th class="head"><p>HTTP method</p></th>
+<th class="head"><p>Python method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>/taskmanagers</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.taskmanager.all</p></td>
+</tr>
+<tr class="row-odd"><td><p>/taskmanagers/metrics</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.taskmanager.metrics</p></td>
+</tr>
+<tr class="row-even"><td><p>/taskmanagers/:taskmanagerid</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.taskmanager.get</p></td>
+</tr>
+<tr class="row-odd"><td><p>/taskmanagers/:taskmanagerid/logs</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.taskmanager.get_logs</p></td>
+</tr>
+<tr class="row-even"><td><p>/taskmanagers/:taskmanagerid/metrics</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.taskmanager.get_metrics</p></td>
+</tr>
+<tr class="row-odd"><td><p>/taskmanagers/:taskmanagerid/thread-dump</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.taskmanager.get_thread_dump</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="jars">
+<h2>Jars<a class="headerlink" href="#jars" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We also provided the <code class="code docutils literal notranslate"><span class="pre">rest_client.jars.upload_and_run</span></code> helper method to upload and start a jar in one method call.</p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 22%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>REST API endpoint</p></th>
+<th class="head"><p>HTTP method</p></th>
+<th class="head"><p>Python method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>/jars</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jars.all</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jars/upload</p></td>
+<td><p>POST</p></td>
+<td><p>rest_client.jars.upload</p></td>
+</tr>
+<tr class="row-even"><td><p>/jars/:jarid/plan</p></td>
+<td><p>POST</p></td>
+<td><p>rest_client.jars.get_plan</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jars/:jarid/run</p></td>
+<td><p>POST</p></td>
+<td><p>rest_client.jars.run</p></td>
+</tr>
+<tr class="row-even"><td><p>/jars/:jarid</p></td>
+<td><p>DELETE</p></td>
+<td><p>rest_client.jars.delete</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="jobs">
+<h2>Jobs<a class="headerlink" href="#jobs" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 10%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>REST API endpoint</p></th>
+<th class="head"><p>HTTP method</p></th>
+<th class="head"><p>Python method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>/jobs</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.all</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/overview</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.overview</p></td>
+</tr>
+<tr class="row-even"><td><p>/jobs/metrics</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.metrics</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/:jobid</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.get</p></td>
+</tr>
+<tr class="row-even"><td><p>/jobs/:jobid/config</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.get_config</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/:jobid/exceptions</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.get_exceptions</p></td>
+</tr>
+<tr class="row-even"><td><p>/jobs/:jobid/execution-result</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.get_execution_results</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/:jobid/metrics</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.get_metrics</p></td>
+</tr>
+<tr class="row-even"><td><p>/jobs/:jobid/plan</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.get_plan</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/:jobid/accumulators</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.get_accumulators</p></td>
+</tr>
+<tr class="row-even"><td><p>/jobs/:jobid/checkpoints/config</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.get_checkpointing_configuration</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/:jobid/checkpoints</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.get_checkpoints</p></td>
+</tr>
+<tr class="row-even"><td><p>/jobs/:jobid/checkpoints/details/:checkpointid</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.get_checkpoint_details</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/:jobid/checkpoints/details/:checkpointid/subtasks/:vertexid</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.get_checkpoint_details</p></td>
+</tr>
+<tr class="row-even"><td><p>/jobs/:jobid/rescaling</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.rescale</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/:jobid/savepoints</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.create_savepoint</p></td>
+</tr>
+<tr class="row-even"><td><p>/jobs/:jobid</p></td>
+<td><p>PATCH</p></td>
+<td><p>rest_client.jobs.terminate</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/:jobid/stop</p></td>
+<td><p>GET</p></td>
+<td><p>rest_client.jobs.stop</p></td>
+</tr>
+</tbody>
+</table>
+<p>Information about jobs’ vertices can be queried via <code class="code docutils literal notranslate"><span class="pre">rest_client.jobs.get_vertex</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flink_rest_client</span> <span class="kn">import</span> <span class="n">FlinkRestClient</span>
+
+<span class="n">rest_client</span> <span class="o">=</span> <span class="n">FlinkRestClient</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8082</span><span class="p">)</span>
+
+<span class="c1"># We already uploaded and started a job and we also received a valid job_id</span>
+<span class="n">job_id</span> <span class="o">=</span> <span class="n">rest_client</span><span class="o">.</span><span class="n">jars</span><span class="o">.</span><span class="n">upload_and_run</span><span class="p">(</span><span class="n">path_to_jar</span><span class="o">=</span><span class="n">path_to_my_jar</span><span class="p">)</span>
+
+<span class="c1"># Listing the vertex ids that belongs to the job.</span>
+<span class="n">job_vertex_ids</span> <span class="o">=</span> <span class="n">rest_client</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">get_vertex_ids</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">)</span>
+
+<span class="c1"># Getting the first job_vertex via get_vertex method</span>
+<span class="n">job_vertex</span> <span class="o">=</span> <span class="n">rest_client</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">get_vertex</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span> <span class="n">vertex_id</span><span class="o">=</span><span class="n">job_vertex_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 55%" />
+<col style="width: 15%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>REST API endpoint</p></th>
+<th class="head"><p>HTTP method</p></th>
+<th class="head"><p>Python method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>/jobs/:jobid/vertices/:vertexid</p></td>
+<td><p>GET</p></td>
+<td><p>job_vertex.details</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/:jobid/vertices/:vertexid/backpressure</p></td>
+<td><p>GET</p></td>
+<td><p>job_vertex.backpressure</p></td>
+</tr>
+<tr class="row-even"><td><p>/jobs/:jobid/vertices/:vertexid/metrics</p></td>
+<td><p>GET</p></td>
+<td><p>job_vertex.metrics</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/:jobid/vertices/:vertexid/subtasktimes</p></td>
+<td><p>GET</p></td>
+<td><p>job_vertex.subtasktimes</p></td>
+</tr>
+<tr class="row-even"><td><p>/jobs/:jobid/vertices/:vertexid/taskmanagers</p></td>
+<td><p>GET</p></td>
+<td><p>job_vertex.taskmanagers</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/:jobid/vertices/:vertexid/watermarks</p></td>
+<td><p>GET</p></td>
+<td><p>job_vertex.watermarks</p></td>
+</tr>
+</tbody>
+</table>
+<p>The job vertex substasks are accessible via <code class="code docutils literal notranslate"><span class="pre">job_vertex.subtasks</span></code> property:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 56%" />
+<col style="width: 10%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>REST API endpoint</p></th>
+<th class="head"><p>HTTP method</p></th>
+<th class="head"><p>Python method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>/jobs/:jobid/vertices/:vertexid/accumulators</p></td>
+<td><p>GET</p></td>
+<td><p>job_vertex.subtasks.accumulators</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/:jobid/vertices/:vertexid/subtasks/metrics</p></td>
+<td><p>GET</p></td>
+<td><p>job_vertex.subtasks.metrics</p></td>
+</tr>
+<tr class="row-even"><td><p>/jobs/:jobid/vertices/:vertexid/subtasks/:subtaskindex</p></td>
+<td><p>GET</p></td>
+<td><p>job_vertex.subtasks.get</p></td>
+</tr>
+<tr class="row-odd"><td><p>/jobs/:jobid/vertices/:vertexid/subtasks/:subtaskindex/attempts/:attempt</p></td>
+<td><p>GET</p></td>
+<td><p>job_vertex.subtasks.get_attempt</p></td>
+</tr>
+<tr class="row-even"><td><p>/jobs/:jobid/vertices/:vertexid/subtasks/accumulators</p></td>
+<td><p>GET</p></td>
+<td><p>job_vertex.subtasks.get_attempt_accumulators</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="usage_examples.html" class="btn btn-neutral float-right" title="Usage examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, frego.dev.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
