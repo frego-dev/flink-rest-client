@@ -93,17 +93,17 @@
 <li class="toctree-l1"><a class="reference internal" href="usage_examples.html">Usage examples</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Python API documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#common">common</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#flink-rest-client-client-module">flink_rest_client.client module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#flink-rest-client-common-module">flink_rest_client.common module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flink_rest_client.client">flink_rest_client.client module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flink_rest_client.common">flink_rest_client.common module</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1">version 1</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#flink-rest-client-v1-client-module">flink_rest_client.v1.client module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#flink-rest-client-v1-jars-module">flink_rest_client.v1.jars module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#flink-rest-client-v1-jobmanager-module">flink_rest_client.v1.jobmanager module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#flink-rest-client-v1-jobs-module">flink_rest_client.v1.jobs module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#flink-rest-client-v1-taskmanagers-module">flink_rest_client.v1.taskmanagers module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flink_rest_client.v1.client">flink_rest_client.v1.client module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flink_rest_client.v1.jars">flink_rest_client.v1.jars module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flink_rest_client.v1.jobmanager">flink_rest_client.v1.jobmanager module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flink_rest_client.v1.jobs">flink_rest_client.v1.jobs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flink_rest_client.v1.taskmanagers">flink_rest_client.v1.taskmanagers module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flink_rest_client.v1">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -179,32 +179,1263 @@
 <h1>Python API documentation<a class="headerlink" href="#python-api-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="common">
 <h2>common<a class="headerlink" href="#common" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="flink-rest-client-client-module">
-<h3>flink_rest_client.client module<a class="headerlink" href="#flink-rest-client-client-module" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-flink_rest_client.client">
+<span id="flink-rest-client-client-module"></span><h3>flink_rest_client.client module<a class="headerlink" href="#module-flink_rest_client.client" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="flink_rest_client.client.FlinkRestClient">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">flink_rest_client.client.</span></span><span class="sig-name descname"><span class="pre">FlinkRestClient</span></span><a class="headerlink" href="#flink_rest_client.client.FlinkRestClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.client.FlinkRestClient.get">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.client.FlinkRestClient.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a new rest client instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>host</strong> (<em>str</em>) – Hostname of Flink Jobmanager</p></li>
+<li><p><strong>port</strong> (<em>int</em>) – Port number. Default value: 8081</p></li>
+<li><p><strong>version</strong> (<em>str</em>) – Version of the REST API. Default value: v1</p></li>
+<li><p><strong>version</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="flink-rest-client-common-module">
-<h3>flink_rest_client.common module<a class="headerlink" href="#flink-rest-client-common-module" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-flink_rest_client.common">
+<span id="flink-rest-client-common-module"></span><h3>flink_rest_client.common module<a class="headerlink" href="#module-flink_rest_client.common" title="Permalink to this headline">¶</a></h3>
+<dl class="py exception">
+<dt class="sig sig-object py" id="flink_rest_client.common.RestException">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">flink_rest_client.common.</span></span><span class="sig-name descname"><span class="pre">RestException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.common.RestException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception to catch REST API related exceptions.</p>
+</dd></dl>
+
 </div>
 </div>
 <div class="section" id="version-1">
 <h2>version 1<a class="headerlink" href="#version-1" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="flink-rest-client-v1-client-module">
-<h3>flink_rest_client.v1.client module<a class="headerlink" href="#flink-rest-client-v1-client-module" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-flink_rest_client.v1.client">
+<span id="flink-rest-client-v1-client-module"></span><h3>flink_rest_client.v1.client module<a class="headerlink" href="#module-flink_rest_client.v1.client" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="flink_rest_client.v1.client.DatasetTrigger">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">flink_rest_client.v1.client.</span></span><span class="sig-name descname"><span class="pre">DatasetTrigger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trigger_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.client.DatasetTrigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="flink_rest_client.v1.client.DatasetTrigger.status">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">status</span></span><a class="headerlink" href="#flink_rest_client.v1.client.DatasetTrigger.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="flink_rest_client.v1.client.FlinkRestClientV1">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">flink_rest_client.v1.client.</span></span><span class="sig-name descname"><span class="pre">FlinkRestClientV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.client.FlinkRestClientV1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="flink_rest_client.v1.client.FlinkRestClientV1.api_url">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">api_url</span></span><a class="headerlink" href="#flink_rest_client.v1.client.FlinkRestClientV1.api_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.client.FlinkRestClientV1.config">
+<span class="sig-name descname"><span class="pre">config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.client.FlinkRestClientV1.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the configuration of the WebUI.</p>
+<p>Endpoint: [GET] /config</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Query result as a dict.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.client.FlinkRestClientV1.datasets">
+<span class="sig-name descname"><span class="pre">datasets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.client.FlinkRestClientV1.datasets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all cluster data sets.</p>
+<p>Endpoint: [GET] /datasets</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Query result as a list of datasets.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.client.FlinkRestClientV1.delete_cluster">
+<span class="sig-name descname"><span class="pre">delete_cluster</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.client.FlinkRestClientV1.delete_cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shuts down the cluster.</p>
+<p>Endpoint: [DELETE] /cluster</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Result of delete operation.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.client.FlinkRestClientV1.delete_dataset">
+<span class="sig-name descname"><span class="pre">delete_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.client.FlinkRestClientV1.delete_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triggers the deletion of a cluster data set. This async operation would return a DatasetTrigger for further
+query identifier.</p>
+<p>Endpoint: [DELETE] /datasets/:datasetid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dataset_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a cluster data set.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Object that can be used to query the status of delete operation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#flink_rest_client.v1.client.DatasetTrigger" title="flink_rest_client.v1.client.DatasetTrigger">DatasetTrigger</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="flink_rest_client.v1.client.FlinkRestClientV1.jars">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">jars</span></span><a class="headerlink" href="#flink_rest_client.v1.client.FlinkRestClientV1.jars" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="flink_rest_client.v1.client.FlinkRestClientV1.jobmanager">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">jobmanager</span></span><a class="headerlink" href="#flink_rest_client.v1.client.FlinkRestClientV1.jobmanager" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="flink_rest_client.v1.client.FlinkRestClientV1.jobs">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">jobs</span></span><a class="headerlink" href="#flink_rest_client.v1.client.FlinkRestClientV1.jobs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.client.FlinkRestClientV1.overview">
+<span class="sig-name descname"><span class="pre">overview</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.client.FlinkRestClientV1.overview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an overview over the Flink cluster.</p>
+<p>Endpoint: [GET] /overview</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Key-value pairs of flink cluster infos.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="flink_rest_client.v1.client.FlinkRestClientV1.taskmanagers">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">taskmanagers</span></span><a class="headerlink" href="#flink_rest_client.v1.client.FlinkRestClientV1.taskmanagers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="flink-rest-client-v1-jars-module">
-<h3>flink_rest_client.v1.jars module<a class="headerlink" href="#flink-rest-client-v1-jars-module" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-flink_rest_client.v1.jars">
+<span id="flink-rest-client-v1-jars-module"></span><h3>flink_rest_client.v1.jars module<a class="headerlink" href="#module-flink_rest_client.v1.jars" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jars.JarsClient">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">flink_rest_client.v1.jars.</span></span><span class="sig-name descname"><span class="pre">JarsClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jars.JarsClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jars.JarsClient.all">
+<span class="sig-name descname"><span class="pre">all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jars.JarsClient.all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all jars previously uploaded via ‘/jars/upload’.</p>
+<p>Endpoint: [GET] /jars</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List all the jars were previously uploaded.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jars.JarsClient.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jar_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jars.JarsClient.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a jar previously uploaded via ‘/jars/upload’.</p>
+<p>Endpoint: [DELETE] /jars/:jarid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>jar_id</strong> (<em>str</em>) – String value that identifies a jar. When uploading the jar a path is returned, where the filename is the ID.
+This value is equivalent to the <cite>id</cite> field in the list of uploaded jars.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True, if jar_id has been successfully deleted, otherwise False.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#flink_rest_client.common.RestException" title="flink_rest_client.common.RestException"><strong>RestException</strong></a> – If the jar_id does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jars.JarsClient.get_plan">
+<span class="sig-name descname"><span class="pre">get_plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jar_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jars.JarsClient.get_plan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the dataflow plan of a job contained in a jar previously uploaded via ‘/jars/upload’.</p>
+<p>Endpoint: [POST] /jars/:jarid/plan</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>jar_id</strong> (<em>str</em>) – String value that identifies a jar. When uploading the jar a path is returned, where the filename is the ID.
+This value is equivalent to the <cite>id</cite> field in the list of uploaded jars.xe</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Details of the jar_id’s plan.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#flink_rest_client.common.RestException" title="flink_rest_client.common.RestException"><strong>RestException</strong></a> – If the jar_id does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jars.JarsClient.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jar_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallelism</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savepoint_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_non_restored_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jars.JarsClient.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Submits a job by running a jar previously uploaded via ‘/jars/upload’.</p>
+<p>Endpoint: [POST] /jars/:jarid/run</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>jar_id</strong> (<em>str</em>) – String value that identifies a jar. When uploading the jar a path is returned, where the filename is the ID.
+This value is equivalent to the <cite>id</cite> field in the list of uploaded jars.</p></li>
+<li><p><strong>arguments</strong> (<em>dict</em>) – (Optional) Dict of program arguments.</p></li>
+<li><p><strong>entry_class</strong> (<em>str</em>) – (Optional) String value that specifies the fully qualified name of the entry point class. Overrides the
+class defined in the jar file manifest.</p></li>
+<li><p><strong>parallelism</strong> (<em>int</em>) – (Optional) Positive integer value that specifies the desired parallelism for the job.</p></li>
+<li><p><strong>savepoint_path</strong> (<em>str</em>) – (Optional) String value that specifies the path of the savepoint to restore the job from.</p></li>
+<li><p><strong>allow_non_restored_state</strong> (<em>bool</em>) – (Optional) Boolean value that specifies whether the job submission should be rejected if the savepoint
+contains state that cannot be mapped back to the job.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>32-character hexadecimal string value that identifies a job.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#flink_rest_client.common.RestException" title="flink_rest_client.common.RestException"><strong>RestException</strong></a> – If the jar_id does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jars.JarsClient.upload">
+<span class="sig-name descname"><span class="pre">upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_jar</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jars.JarsClient.upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uploads a jar to the cluster from the input path. The jar’s name will be the original filename from the input
+path.</p>
+<p>Endpoint: [POST] /jars/upload</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path_to_jar</strong> (<em>str</em>) – Path to the jar file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result of jar upload.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jars.JarsClient.upload_and_run">
+<span class="sig-name descname"><span class="pre">upload_and_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_jar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallelism</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savepoint_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_non_restored_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jars.JarsClient.upload_and_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper method to upload and start a jar in one method call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_to_jar</strong> (<em>str</em>) – Path to the jar file.</p></li>
+<li><p><strong>arguments</strong> (<em>dict</em>) – (Optional) Comma-separated list of program arguments.</p></li>
+<li><p><strong>entry_class</strong> (<em>str</em>) – (Optional) String value that specifies the fully qualified name of the entry point class. Overrides the
+class defined in the jar file manifest.</p></li>
+<li><p><strong>parallelism</strong> (<em>int</em>) – (Optional) Positive integer value that specifies the desired parallelism for the job.</p></li>
+<li><p><strong>savepoint_path</strong> (<em>str</em>) – (Optional) String value that specifies the path of the savepoint to restore the job from.</p></li>
+<li><p><strong>allow_non_restored_state</strong> (<em>bool</em>) – (Optional) Boolean value that specifies whether the job submission should be rejected if the savepoint
+contains state that cannot be mapped back to the job.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>32-character hexadecimal string value that identifies a job.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#flink_rest_client.common.RestException" title="flink_rest_client.common.RestException"><strong>RestException</strong></a> – If an error occurred during the upload of jar file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="flink-rest-client-v1-jobmanager-module">
-<h3>flink_rest_client.v1.jobmanager module<a class="headerlink" href="#flink-rest-client-v1-jobmanager-module" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-flink_rest_client.v1.jobmanager">
+<span id="flink-rest-client-v1-jobmanager-module"></span><h3>flink_rest_client.v1.jobmanager module<a class="headerlink" href="#module-flink_rest_client.v1.jobmanager" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobmanager.JobmanagerClient">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">flink_rest_client.v1.jobmanager.</span></span><span class="sig-name descname"><span class="pre">JobmanagerClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobmanager.JobmanagerClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobmanager.JobmanagerClient.config">
+<span class="sig-name descname"><span class="pre">config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobmanager.JobmanagerClient.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the cluster configuration.</p>
+<p>Endpoint: [GET] /jobmanager/config</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Cluster configuration dictionary.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobmanager.JobmanagerClient.get_log">
+<span class="sig-name descname"><span class="pre">get_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobmanager.JobmanagerClient.get_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the content of the log_file.</p>
+<p>Endpoint: [GET] /jobmanager/logs/:log_file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>log_file</strong> (<em>str</em>) – Name of the log file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The content of the log file as a string</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobmanager.JobmanagerClient.logs">
+<span class="sig-name descname"><span class="pre">logs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobmanager.JobmanagerClient.logs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of log files on the JobManager.</p>
+<p>Endpoint: [GET] /jobmanager/logs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of log files</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobmanager.JobmanagerClient.metric_names">
+<span class="sig-name descname"><span class="pre">metric_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobmanager.JobmanagerClient.metric_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the supported metric names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of metric names.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobmanager.JobmanagerClient.metrics">
+<span class="sig-name descname"><span class="pre">metrics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobmanager.JobmanagerClient.metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides access to job manager metrics.</p>
+<blockquote>
+<div><p>Endpoint: [GET] /jobmanager/metrics</p>
+<dl class="simple">
+<dt>dict</dt><dd><p>Jobmanager metrics</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="flink-rest-client-v1-jobs-module">
-<h3>flink_rest_client.v1.jobs module<a class="headerlink" href="#flink-rest-client-v1-jobs-module" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-flink_rest_client.v1.jobs">
+<span id="flink-rest-client-v1-jobs-module"></span><h3>flink_rest_client.v1.jobs module<a class="headerlink" href="#module-flink_rest_client.v1.jobs" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobTrigger">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">flink_rest_client.v1.jobs.</span></span><span class="sig-name descname"><span class="pre">JobTrigger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trigger_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobTrigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobTrigger.status">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">status</span></span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobTrigger.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexClient">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">flink_rest_client.v1.jobs.</span></span><span class="sig-name descname"><span class="pre">JobVertexClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexClient.backpressure">
+<span class="sig-name descname"><span class="pre">backpressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexClient.backpressure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns back-pressure information for a job, and may initiate back-pressure sampling if necessary.</p>
+<p>Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/backpressure</p>
+<p class="rubric">Notes</p>
+<p>The deprecated status means that the back pressure stats are not available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Backpressure information</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexClient.details">
+<span class="sig-name descname"><span class="pre">details</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexClient.details" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns details for a task, with a summary for each of its subtasks.</p>
+<p>Endpoint: [GET] /jobs/:jobid/vertices/:vertexid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>details for a task.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexClient.metric_names">
+<span class="sig-name descname"><span class="pre">metric_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexClient.metric_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the supported metric names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of metric names.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexClient.metrics">
+<span class="sig-name descname"><span class="pre">metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexClient.metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides access to task metrics.</p>
+<p>Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/metrics</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Task metrics.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexClient.prefix_url">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">prefix_url</span></span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexClient.prefix_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexClient.subtasks">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">subtasks</span></span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexClient.subtasks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexClient.subtasktimes">
+<span class="sig-name descname"><span class="pre">subtasktimes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexClient.subtasktimes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns time-related information for all subtasks of a task.</p>
+<p>Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/subtasktimes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Time-related information for all subtasks</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexClient.taskmanagers">
+<span class="sig-name descname"><span class="pre">taskmanagers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexClient.taskmanagers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns task information aggregated by task manager.</p>
+<p>Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/taskmanagers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Task information aggregated by task manager.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexClient.watermarks">
+<span class="sig-name descname"><span class="pre">watermarks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexClient.watermarks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the watermarks for all subtasks of a task.</p>
+<p>Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/watermarks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Watermarks for all subtasks of a task.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexSubtaskClient">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">flink_rest_client.v1.jobs.</span></span><span class="sig-name descname"><span class="pre">JobVertexSubtaskClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexSubtaskClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexSubtaskClient.accumulators">
+<span class="sig-name descname"><span class="pre">accumulators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexSubtaskClient.accumulators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all user-defined accumulators for all subtasks of a task.</p>
+<p>Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/accumulators</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>User-defined accumulators</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexSubtaskClient.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subtask_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexSubtaskClient.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns details of the current or latest execution attempt of a subtask.</p>
+<p>Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/subtasks/:subtaskindex</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>subtask_id</strong> (<em>int</em>) – Positive integer value that identifies a subtask.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexSubtaskClient.get_attempt">
+<span class="sig-name descname"><span class="pre">get_attempt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subtask_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attempt_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexSubtaskClient.get_attempt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns details of an execution attempt of a subtask. Multiple execution attempts happen in case of
+failure/recovery.</p>
+<p>Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/subtasks/:subtaskindex/attempts/:attempt</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subtask_id</strong> (<em>int</em>) – Positive integer value that identifies a subtask.</p></li>
+<li><p><strong>attempt_id</strong> (<em>int</em>) – (Optional) Positive integer value that identifies an execution attempt.
+Default: current execution attempt’s id</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Details of the selected attempt.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexSubtaskClient.get_attempt_accumulators">
+<span class="sig-name descname"><span class="pre">get_attempt_accumulators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subtask_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attempt_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexSubtaskClient.get_attempt_accumulators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the accumulators of an execution attempt of a subtask. Multiple execution attempts happen in case of
+failure/recovery.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subtask_id</strong> (<em>int</em>) – Positive integer value that identifies a subtask.</p></li>
+<li><p><strong>attempt_id</strong> (<em>int</em>) – (Optional) Positive integer value that identifies an execution attempt.
+Default: current execution attempt’s id</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The accumulators of the selected execution attempt of a subtask.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexSubtaskClient.metric_names">
+<span class="sig-name descname"><span class="pre">metric_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexSubtaskClient.metric_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the supported metric names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of metric names.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexSubtaskClient.metrics">
+<span class="sig-name descname"><span class="pre">metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtask_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexSubtaskClient.metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides access to aggregated subtask metrics.
+By default it returns with all existing metric names.</p>
+<p>Endpoint: [GET] /jobs/:jobid/vertices/:vertexid/subtasks/metrics</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metric_names</strong> (<em>list</em>) – (optional) List of selected specific metric names. Default: &lt;all metrics&gt;</p></li>
+<li><p><strong>agg_modes</strong> (<em>list</em>) – (optional) List of aggregation modes which should be calculated. Available aggregations are: “min, max,
+sum, avg”. Default: &lt;all modes&gt;</p></li>
+<li><p><strong>subtask_ids</strong> (<em>list</em>) – List of positive integers to select specific subtasks. The list of valid subtask ids is available through
+the subtask_ids() method. Default: &lt;all subtasks&gt;.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Key-value pairs of metrics.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexSubtaskClient.prefix_url">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">prefix_url</span></span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexSubtaskClient.prefix_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobVertexSubtaskClient.subtask_ids">
+<span class="sig-name descname"><span class="pre">subtask_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobVertexSubtaskClient.subtask_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the subtask identifiers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Positive integer list of subtask ids.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">flink_rest_client.v1.jobs.</span></span><span class="sig-name descname"><span class="pre">JobsClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.all">
+<span class="sig-name descname"><span class="pre">all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an overview over all jobs and their current state.</p>
+<p>Endpoint: [GET] /jobs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of jobs and their current state.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.create_savepoint">
+<span class="sig-name descname"><span class="pre">create_savepoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cancel_job</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.create_savepoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triggers a savepoint, and optionally cancels the job afterwards. This async operation would return a
+JobTrigger for further query identifier.</p>
+<p>Endpoint: [GET] /jobs/:jobid/savepoints</p>
+<p class="rubric">Notes</p>
+<p>The target directory has to be a location accessible by both the JobManager(s) and TaskManager(s)
+e.g. a location on a distributed file-system or Object Store.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p></li>
+<li><p><strong>target_directory</strong> (<em>str</em>) – Savepoint target directory.</p></li>
+<li><p><strong>cancel_job</strong> (<em>bool</em>) – If it is True, it also stops the job after the savepoint creation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Object that can be used to query the status of savepoint.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#flink_rest_client.v1.jobs.JobTrigger" title="flink_rest_client.v1.jobs.JobTrigger">JobTrigger</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns details of a job.</p>
+<p>Endpoint: [GET] /jobs/:jobid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Details of the selected job.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.get_accumulators">
+<span class="sig-name descname"><span class="pre">get_accumulators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_serialized_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.get_accumulators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the accumulators for all tasks of a job, aggregated across the respective subtasks.</p>
+<p>Endpoint: [GET] /jobs/:jobid/accumulators</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p></li>
+<li><p><strong>include_serialized_value</strong> (<em>bool</em>) – (Optional) Boolean value that specifies whether serialized user task accumulators should be included in
+the response.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Accumulators for all task.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.get_checkpoint_details">
+<span class="sig-name descname"><span class="pre">get_checkpoint_details</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_subtasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.get_checkpoint_details" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns details for a checkpoint.</p>
+<p>Endpoint: [GET] /jobs/:jobid/checkpoints/details/:checkpointid</p>
+<p>If show_subtasks is true:
+Endpoint: [GET] /jobs/:jobid/checkpoints/details/:checkpointid/subtasks/:vertexid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p></li>
+<li><p><strong>checkpoint_id</strong> (<em>int</em>) – Long value that identifies a checkpoint.</p></li>
+<li><p><strong>show_subtasks</strong> (<em>bool</em>) – If it is True, the details of the subtask are also returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.get_checkpoint_ids">
+<span class="sig-name descname"><span class="pre">get_checkpoint_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.get_checkpoint_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns checkpoint ids of the job_id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of checkpoint ids.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.get_checkpointing_configuration">
+<span class="sig-name descname"><span class="pre">get_checkpointing_configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.get_checkpointing_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the checkpointing configuration of the selected job_id</p>
+<p>Endpoint: [GET] /jobs/:jobid/checkpoints/config</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Checkpointing configuration of the selected job.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.get_checkpoints">
+<span class="sig-name descname"><span class="pre">get_checkpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.get_checkpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns checkpointing statistics for a job.</p>
+<p>Endpoint: [GET] /jobs/:jobid/checkpoints</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Checkpointing statistics for the selected job: counts, summary, latest and history.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.get_config">
+<span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.get_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the configuration of a job.</p>
+<p>Endpoint: [GET] /jobs/:jobid/config</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Job configuration</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.get_exceptions">
+<span class="sig-name descname"><span class="pre">get_exceptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.get_exceptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the most recent exceptions that have been handled by Flink for this job.</p>
+<p>Endpoint: [GET] /jobs/:jobid/exceptions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The most recent exceptions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.get_execution_result">
+<span class="sig-name descname"><span class="pre">get_execution_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.get_execution_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the result of a job execution. Gives access to the execution time of the job and to all accumulators
+created by this job.</p>
+<p>Endpoint: [GET] /jobs/:jobid/execution-result</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The execution result of the selected job.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.get_metrics">
+<span class="sig-name descname"><span class="pre">get_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.get_metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides access to job metrics.</p>
+<p>Endpoint: [GET] /jobs/:jobid/metrics</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p></li>
+<li><p><strong>metric_names</strong> (<em>list</em>) – (optional) List of selected specific metric names. Default: &lt;all metrics&gt;</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Job metrics.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.get_plan">
+<span class="sig-name descname"><span class="pre">get_plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.get_plan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the dataflow plan of a job.</p>
+<p>Endpoint: [GET] /jobs/:jobid/plan</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dataflow plan</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.get_vertex">
+<span class="sig-name descname"><span class="pre">get_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.get_vertex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a JobVertexClient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p></li>
+<li><p><strong>vertex_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a vertex.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>JobVertexClient instance that can execute vertex related queries.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#flink_rest_client.v1.jobs.JobVertexClient" title="flink_rest_client.v1.jobs.JobVertexClient">JobVertexClient</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.get_vertex_ids">
+<span class="sig-name descname"><span class="pre">get_vertex_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.get_vertex_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the ids of vertices of the selected job.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of identifiers.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.job_ids">
+<span class="sig-name descname"><span class="pre">job_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.job_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of job_ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of job ids.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.metric_names">
+<span class="sig-name descname"><span class="pre">metric_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.metric_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the supported metric names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of metric names.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.metrics">
+<span class="sig-name descname"><span class="pre">metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an overview over all jobs.</p>
+<p>Endpoint: [GET] /jobs/metrics</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metric_names</strong> (<em>list</em>) – (optional) List of selected specific metric names. Default: &lt;all metrics&gt;</p></li>
+<li><p><strong>agg_modes</strong> (<em>list</em>) – (optional) List of aggregation modes which should be calculated. Available aggregations are: “min, max,
+sum, avg”. Default: &lt;all modes&gt;</p></li>
+<li><p><strong>job_ids</strong> (<em>list</em>) – List of 32-character hexadecimal strings to select specific jobs. The list of valid jobs
+are available through the job_ids() method. Default: &lt;all taskmanagers&gt;.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Aggregated job metrics.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.overview">
+<span class="sig-name descname"><span class="pre">overview</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.overview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an overview over all jobs.</p>
+<p>Endpoint: [GET] /jobs/overview</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of existing jobs.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.rescale">
+<span class="sig-name descname"><span class="pre">rescale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallelism</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.rescale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triggers the rescaling of a job. This async operation would return a ‘triggerid’ for further query identifier.</p>
+<p>Endpoint: [GET] /jobs/:jobid/rescaling</p>
+<p class="rubric">Notes</p>
+<p>Using Flink version 1.12, the method will raise RestHandlerException because this rescaling is temporarily
+disabled. See FLINK-12312.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p></li>
+<li><p><strong>parallelism</strong> (<em>int</em>) – Positive integer value that specifies the desired parallelism.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Object that can be used to query the status of rescaling.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#flink_rest_client.v1.jobs.JobTrigger" title="flink_rest_client.v1.jobs.JobTrigger">JobTrigger</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops a job with a savepoint. This async operation would return a JobTrigger for further query identifier.</p>
+<p>Attention: The target directory has to be a location accessible by both the JobManager(s) and TaskManager(s)
+e.g. a location on a distributed file-system or Object Store.</p>
+<p>Draining emits the maximum watermark before stopping the job. When the watermark is emitted, all event time
+timers will fire, allowing you to process events that depend on this timer (e.g. time windows or process
+functions). This is useful when you want to fully shut down your job without leaving any unhandled events
+or state.</p>
+<p>Endpoint: [GET] /jobs/:jobid/stop</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p></li>
+<li><p><strong>target_directory</strong> (<em>str</em>) – Savepoint target directory.</p></li>
+<li><p><strong>drain</strong> (<em>bool</em>) – (Optional) If it is True, it emits the maximum watermark before stopping the job. default: False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Object that can be used to query the status of savepoint.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#flink_rest_client.v1.jobs.JobTrigger" title="flink_rest_client.v1.jobs.JobTrigger">JobTrigger</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.jobs.JobsClient.terminate">
+<span class="sig-name descname"><span class="pre">terminate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.jobs.JobsClient.terminate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Terminates a job.</p>
+<p>Endpoint: [PATCH] /jobs/:jobid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_id</strong> (<em>str</em>) – 32-character hexadecimal string value that identifies a job.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the job has been canceled, otherwise False.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="flink-rest-client-v1-taskmanagers-module">
-<h3>flink_rest_client.v1.taskmanagers module<a class="headerlink" href="#flink-rest-client-v1-taskmanagers-module" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-flink_rest_client.v1.taskmanagers">
+<span id="flink-rest-client-v1-taskmanagers-module"></span><h3>flink_rest_client.v1.taskmanagers module<a class="headerlink" href="#module-flink_rest_client.v1.taskmanagers" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="flink_rest_client.v1.taskmanagers.TaskManagersClient">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">flink_rest_client.v1.taskmanagers.</span></span><span class="sig-name descname"><span class="pre">TaskManagersClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.taskmanagers.TaskManagersClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.taskmanagers.TaskManagersClient.all">
+<span class="sig-name descname"><span class="pre">all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.taskmanagers.TaskManagersClient.all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an overview over all task managers.</p>
+<p>Endpoint: [GET] /taskmanagers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of taskmanagers. Each taskmanager is represented by a dictionary.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.taskmanagers.TaskManagersClient.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">taskmanager_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.taskmanagers.TaskManagersClient.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns details for a task manager.</p>
+<p>Endpoint: [GET] /taskmanagers/:taskmanagerid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>taskmanager_id</strong> (<em>str</em>) – 32-character hexadecimal string that identifies a task manager.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Query result as a dict.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.taskmanagers.TaskManagersClient.get_logs">
+<span class="sig-name descname"><span class="pre">get_logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">taskmanager_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.taskmanagers.TaskManagersClient.get_logs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of log files on a TaskManager.</p>
+<p>Endpoint: [GET] /taskmanagers/:taskmanagerid/logs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>taskmanager_id</strong> (<em>str</em>) – 32-character hexadecimal string that identifies a task manager.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of log files in which each element contains a name and size fields.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.taskmanagers.TaskManagersClient.get_metrics">
+<span class="sig-name descname"><span class="pre">get_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">taskmanager_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.taskmanagers.TaskManagersClient.get_metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides access to task manager metrics.</p>
+<p>Endpoint: [GET] /taskmanagers/:taskmanagerid/metrics</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>taskmanager_id</strong> (<em>str</em>) – 32-character hexadecimal string that identifies a task manager.</p></li>
+<li><p><strong>metric_names</strong> (<em>list</em>) – (optional) List of selected specific metric names. Default: &lt;all metrics&gt;</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Metric name -&gt; Metric value key-value pairs. The values are provided as strings.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.taskmanagers.TaskManagersClient.get_thread_dump">
+<span class="sig-name descname"><span class="pre">get_thread_dump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">taskmanager_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.taskmanagers.TaskManagersClient.get_thread_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the thread dump of the requested TaskManager.</p>
+<p>Endpoint: [GET] /taskmanagers/:taskmanagerid/thread-dump</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>taskmanager_id</strong> (<em>str</em>) – 32-character hexadecimal string that identifies a task manager.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>ThreadName -&gt; StringifiedThreadInfo key-value pairs.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.taskmanagers.TaskManagersClient.metric_names">
+<span class="sig-name descname"><span class="pre">metric_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.taskmanagers.TaskManagersClient.metric_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the supported metric names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of metric names.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.taskmanagers.TaskManagersClient.metrics">
+<span class="sig-name descname"><span class="pre">metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taskmanager_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.taskmanagers.TaskManagersClient.metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides access to aggregated task manager metrics.
+By default it returns with all existing metric names.</p>
+<p>Endpoint: [GET] /taskmanagers/metrics</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metric_names</strong> (<em>list</em>) – (optional) List of selected specific metric names. Default: &lt;all metrics&gt;</p></li>
+<li><p><strong>agg_modes</strong> (<em>list</em>) – (optional) List of aggregation modes which should be calculated. Available aggregations are: “min, max,
+sum, avg”. Default: &lt;all modes&gt;</p></li>
+<li><p><strong>taskmanager_ids</strong> (<em>list</em>) – List of 32-character hexadecimal strings to select specific task managers. The list of valid taskmanager ids
+are available through the taskmanager_ids() method. Default: &lt;all taskmanagers&gt;.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Key-value pairs of metrics.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.v1.taskmanagers.TaskManagersClient.taskmanager_ids">
+<span class="sig-name descname"><span class="pre">taskmanager_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.v1.taskmanagers.TaskManagersClient.taskmanager_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of taskmanager_ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of taskmanager ids.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="module-contents">
-<h3>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-flink_rest_client.v1">
+<span id="module-contents"></span><h3>Module contents<a class="headerlink" href="#module-flink_rest_client.v1" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 </div>

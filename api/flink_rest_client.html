@@ -166,12 +166,12 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="flink_rest_client.v1.html">flink_rest_client.v1 package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="flink_rest_client.v1.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="flink_rest_client.v1.html#flink-rest-client-v1-client-module">flink_rest_client.v1.client module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="flink_rest_client.v1.html#flink-rest-client-v1-jars-module">flink_rest_client.v1.jars module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="flink_rest_client.v1.html#flink-rest-client-v1-jobmanager-module">flink_rest_client.v1.jobmanager module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="flink_rest_client.v1.html#flink-rest-client-v1-jobs-module">flink_rest_client.v1.jobs module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="flink_rest_client.v1.html#flink-rest-client-v1-taskmanagers-module">flink_rest_client.v1.taskmanagers module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="flink_rest_client.v1.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flink_rest_client.v1.html#module-flink_rest_client.v1.client">flink_rest_client.v1.client module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flink_rest_client.v1.html#module-flink_rest_client.v1.jars">flink_rest_client.v1.jars module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flink_rest_client.v1.html#module-flink_rest_client.v1.jobmanager">flink_rest_client.v1.jobmanager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flink_rest_client.v1.html#module-flink_rest_client.v1.jobs">flink_rest_client.v1.jobs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flink_rest_client.v1.html#module-flink_rest_client.v1.taskmanagers">flink_rest_client.v1.taskmanagers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flink_rest_client.v1.html#module-flink_rest_client.v1">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -180,14 +180,43 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="flink-rest-client-client-module">
-<h2>flink_rest_client.client module<a class="headerlink" href="#flink-rest-client-client-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-flink_rest_client.client">
+<span id="flink-rest-client-client-module"></span><h2>flink_rest_client.client module<a class="headerlink" href="#module-flink_rest_client.client" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="flink_rest_client.client.FlinkRestClient">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">flink_rest_client.client.</span></span><span class="sig-name descname"><span class="pre">FlinkRestClient</span></span><a class="headerlink" href="#flink_rest_client.client.FlinkRestClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="flink_rest_client.client.FlinkRestClient.get">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.client.FlinkRestClient.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a new rest client instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>host</strong> (<em>str</em>) – Hostname of Flink Jobmanager</p></li>
+<li><p><strong>port</strong> (<em>int</em>) – Port number. Default value: 8081</p></li>
+<li><p><strong>version</strong> (<em>str</em>) – Version of the REST API. Default value: v1</p></li>
+<li><p><strong>version</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="flink-rest-client-common-module">
-<h2>flink_rest_client.common module<a class="headerlink" href="#flink-rest-client-common-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-flink_rest_client.common">
+<span id="flink-rest-client-common-module"></span><h2>flink_rest_client.common module<a class="headerlink" href="#module-flink_rest_client.common" title="Permalink to this headline">¶</a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="flink_rest_client.common.RestException">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">flink_rest_client.common.</span></span><span class="sig-name descname"><span class="pre">RestException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flink_rest_client.common.RestException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception to catch REST API related exceptions.</p>
+</dd></dl>
+
 </div>
-<div class="section" id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-flink_rest_client">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-flink_rest_client" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
