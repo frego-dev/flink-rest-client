@@ -29,7 +29,7 @@ pip install flink_rest_client
 
 ## Documentation
 
-The official documentation is hosted on: [flink_rest_client.frego.dev](https://flink_rest_client.frego.dev/)
+The official documentation is hosted on: [official documentation](https://frego-dev.github.io/flink-rest-client/)
 
 
 ## License

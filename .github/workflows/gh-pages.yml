@@ -38,6 +38,7 @@ jobs:
 
       - name: Build Sphinx documentation
         run: |
+          pip install -e .
           cd docs
           sphinx-apidoc -f -o source/api ../flink_rest_client/
           make html
