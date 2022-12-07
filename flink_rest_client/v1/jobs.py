@@ -2,11 +2,13 @@ from flink_rest_client.common import _execute_rest_request, RestException
 
 
 class JobTrigger:
-    def __init__(self, prefix, type_name, job_id, trigger_id):
+    def __init__(self, prefix, type_name, job_id, trigger_id, auth, verify):
         self._prefix = prefix
         self._type_name = type_name
         self.job_id = job_id
         self.trigger_id = trigger_id
+        self.auth = auth
+        self.verify = verify
 
     @property
     def status(self):
@@ -16,7 +18,7 @@ class JobTrigger:
 
 
 class JobVertexSubtaskClient:
-    def __init__(self, prefix):
+    def __init__(self, prefix, auth, verify):
         """
         Constructor.
 
@@ -26,6 +28,8 @@ class JobVertexSubtaskClient:
             REST API url prefix. It must contain the host, port pair.
         """
         self._prefix = prefix
+        self.auth = auth
+        self.verify = verify
 
     @property
     def prefix_url(self):
@@ -199,7 +203,7 @@ class JobVertexSubtaskClient:
 
 
 class JobVertexClient:
-    def __init__(self, prefix, job_id, vertex_id):
+    def __init__(self, prefix, job_id, vertex_id, auth, verify):
         """
         Constructor.
 
@@ -211,6 +215,8 @@ class JobVertexClient:
         self._prefix = prefix
         self.job_id = job_id
         self.vertex_id = vertex_id
+        self.auth = auth
+        self.verify = verify
 
     @property
     def prefix_url(self):
@@ -329,7 +335,7 @@ class JobVertexClient:
 
 
 class JobsClient:
-    def __init__(self, prefix):
+    def __init__(self, prefix, auth, verify):
         """
         Constructor.
 
@@ -339,6 +345,8 @@ class JobsClient:
             REST API url prefix. It must contain the host, port pair.
         """
         self.prefix = f"{prefix}/jobs"
+        self.auth = auth
+        self.verify = verify
 
     def all(self):
         """
