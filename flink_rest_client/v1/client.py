@@ -16,9 +16,10 @@ class DatasetTrigger:
 
 
 class FlinkRestClientV1:
-    def __init__(self, host, port):
+    def __init__(self, host, port, auth):
         self.host = host
         self.port = port
+        self.auth = auth
 
     @property
     def api_url(self):
@@ -54,7 +55,7 @@ class FlinkRestClientV1:
         dict
             Key-value pairs of flink cluster infos.
         """
-        return _execute_rest_request(url=f"{self.api_url}/overview")
+        return _execute_rest_request(url=f"{self.api_url}/overview", auth=self.auth)
 
     def config(self):
         """
@@ -67,7 +68,7 @@ class FlinkRestClientV1:
         dict
             Query result as a dict.
         """
-        return _execute_rest_request(url=f"{self.api_url}/config", http_method="GET")
+        return _execute_rest_request(url=f"{self.api_url}/config", http_method="GET", auth=self.auth)
 
     def delete_cluster(self):
         """
@@ -81,7 +82,7 @@ class FlinkRestClientV1:
             Result of delete operation.
         """
         return _execute_rest_request(
-            url=f"{self.api_url}/cluster", http_method="DELETE"
+            url=f"{self.api_url}/cluster", http_method="DELETE", auth=self.auth
         )
 
     def datasets(self):
@@ -95,7 +96,7 @@ class FlinkRestClientV1:
         list
             Query result as a list of datasets.
         """
-        return _execute_rest_request(url=f"{self.api_url}/datasets", http_method="GET")[
+        return _execute_rest_request(url=f"{self.api_url}/datasets", http_method="GET", auth=self.auth)[
             "dataSets"
         ]
 
@@ -120,6 +121,7 @@ class FlinkRestClientV1:
             url=f"{self.api_url}/datasets/{dataset_id}",
             http_method="DELETE",
             accepted_status_code=202,
+            auth=self.auth,
         )["request-id"]
         return DatasetTrigger(
             prefix=f"{self.api_url}/datasets/delete", trigger_id=trigger_id
