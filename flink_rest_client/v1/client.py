@@ -24,7 +24,7 @@ class FlinkRestClientV1:
 
     @property
     def api_url(self):
-        if self.port == 443:
+        if self.port == "443":
             return f"https://{self.host}:{str(self.port)}/v1"
         else:
             return f"http://{self.host}:{str(self.port)}/v1"
