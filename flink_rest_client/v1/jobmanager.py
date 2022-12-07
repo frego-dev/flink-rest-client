@@ -4,7 +4,7 @@ from flink_rest_client.common import _execute_rest_request, RestException
 
 
 class JobmanagerClient:
-    def __init__(self, prefix):
+    def __init__(self, prefix, auth, verify):
         """
         Constructor.
 
@@ -14,6 +14,8 @@ class JobmanagerClient:
             REST API url prefix. It must contain the host, port pair.
         """
         self.prefix = f"{prefix}/jobmanager"
+        self.auth = auth
+        self.verify = verify
 
     def config(self):
         """
@@ -26,7 +28,7 @@ class JobmanagerClient:
         dict
             Cluster configuration dictionary.
         """
-        query_result = _execute_rest_request(url=f"{self.prefix}/config")
+        query_result = _execute_rest_request(url=f"{self.prefix}/config", auth=self.auth, verify=self.verify)
         return dict([(elem["key"], elem["value"]) for elem in query_result])
 
     def logs(self):
@@ -40,7 +42,7 @@ class JobmanagerClient:
         dict
             List of log files
         """
-        return _execute_rest_request(url=f"{self.prefix}/logs")["logs"]
+        return _execute_rest_request(url=f"{self.prefix}/logs", auth=self.auth, verify=self.verify)["logs"]
 
     def get_log(self, log_file):
         """
@@ -79,7 +81,7 @@ class JobmanagerClient:
             List of metric names.
         """
         return [
-            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics")
+            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics", auth=self.auth, verify=self.verify)
         ]
 
     def metrics(self):
@@ -96,6 +98,6 @@ class JobmanagerClient:
         metric_names = self.metric_names()
         params = {"get": ",".join(metric_names)}
         query_result = _execute_rest_request(
-            url=f"{self.prefix}/metrics", params=params
+            url=f"{self.prefix}/metrics", params=params, auth=self.auth, verify=self.verify
         )
         return dict([(elem["id"], elem["value"]) for elem in query_result])
