@@ -17,6 +17,7 @@ def _execute_rest_request(
     files=None,
     params=None,
     data=None,
+    auth=Nome,
     json=None,
 ):
     if http_method is None:
@@ -25,13 +26,15 @@ def _execute_rest_request(
         params = {}
     if data is None:
         data = {}
+    if auth is None:
+        auth = {}
 
     # If accepted_status_code is None then default value is set.
     if accepted_status_code is None:
         accepted_status_code = 200
 
     response = requests.request(
-        method=http_method, url=url, files=files, params=params, data=data, json=json
+        method=http_method, url=url, files=files, params=params, data=data, auth=auth, json=json
     )
     if response.status_code == accepted_status_code:
         return response.json()
