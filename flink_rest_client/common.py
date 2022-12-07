@@ -17,7 +17,7 @@ def _execute_rest_request(
     files=None,
     params=None,
     data=None,
-    auth=Nome,
+    auth=None,
     json=None,
 ):
     if http_method is None:
