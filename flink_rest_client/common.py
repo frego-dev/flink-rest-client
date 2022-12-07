@@ -28,13 +28,15 @@ def _execute_rest_request(
         data = {}
     if auth is None:
         auth = {}
+    if verify is None:
+        verify = {}
 
     # If accepted_status_code is None then default value is set.
     if accepted_status_code is None:
         accepted_status_code = 200
 
     response = requests.request(
-        method=http_method, url=url, files=files, params=params, data=data, auth=auth, json=json
+        method=http_method, url=url, files=files, params=params, data=data, auth=auth, verify=verify, json=json
     )
     if response.status_code == accepted_status_code:
         return response.json()

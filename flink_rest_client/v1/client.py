@@ -22,7 +22,10 @@ class FlinkRestClientV1:
 
     @property
     def api_url(self):
-        return f"http://{self.host}:{str(self.port)}/v1"
+        if self.port == 443:
+            return f"http://{self.host}:{str(self.port)}/v1"
+        else:
+            return f"http://{self.host}:{str(self.port)}/v1"
 
     @property
     def jobmanager(self):
