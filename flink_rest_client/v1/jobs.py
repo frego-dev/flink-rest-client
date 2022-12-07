@@ -11,7 +11,7 @@ class JobTrigger:
     @property
     def status(self):
         return _execute_rest_request(
-            url=f"{self._prefix}/{self.job_id}/{self._type_name}/{self.trigger_id}"
+            url=f"{self._prefix}/{self.job_id}/{self._type_name}/{self.trigger_id}", auth=self.auth, verify=self.verify
         )
 
 
@@ -53,7 +53,7 @@ class JobVertexSubtaskClient:
         dict
             User-defined accumulators
         """
-        return _execute_rest_request(url=f"{self.prefix_url}/accumulators")
+        return _execute_rest_request(url=f"{self.prefix_url}/accumulators", auth=self.auth, verify=self.verify)
 
     def metric_names(self):
         """
@@ -66,7 +66,7 @@ class JobVertexSubtaskClient:
         """
         return [
             elem["id"]
-            for elem in _execute_rest_request(url=f"{self.prefix_url}/metrics")
+            for elem in _execute_rest_request(url=f"{self.prefix_url}/metrics", auth=self.auth, verify=self.verify)
         ]
 
     def metrics(self, metric_names=None, agg_modes=None, subtask_ids=None):
@@ -116,7 +116,7 @@ class JobVertexSubtaskClient:
             "subtasks": ",".join([str(elem) for elem in subtask_ids]),
         }
         query_result = _execute_rest_request(
-            url=f"{self.prefix_url}/metrics", params=params
+            url=f"{self.prefix_url}/metrics", params=params, auth=self.auth, verify=self.verify
         )
 
         result = {}
@@ -142,7 +142,7 @@ class JobVertexSubtaskClient:
         dict
 
         """
-        return _execute_rest_request(url=f"{self.prefix_url}/{subtask_id}")
+        return _execute_rest_request(url=f"{self.prefix_url}/{subtask_id}", auth=self.auth, verify=self.verify)
 
     def get_attempt(self, subtask_id, attempt_id=None):
         """
@@ -168,7 +168,7 @@ class JobVertexSubtaskClient:
         if attempt_id is None:
             return self.get(subtask_id)
         return _execute_rest_request(
-            url=f"{self.prefix_url}/{subtask_id}/attempts/{attempt_id}"
+            url=f"{self.prefix_url}/{subtask_id}/attempts/{attempt_id}", auth=self.auth, verify=self.verify
         )
 
     def get_attempt_accumulators(self, subtask_id, attempt_id=None):
@@ -194,7 +194,7 @@ class JobVertexSubtaskClient:
         if attempt_id is None:
             attempt_id = self.get(subtask_id)["attempt"]
         return _execute_rest_request(
-            url=f"{self.prefix_url}/{subtask_id}/attempts/{attempt_id}/accumulators"
+            url=f"{self.prefix_url}/{subtask_id}/attempts/{attempt_id}/accumulators", auth=self.auth, verify=self.verify
         )
 
 
@@ -231,7 +231,7 @@ class JobVertexClient:
         dict
             details for a task.
         """
-        return _execute_rest_request(url=self.prefix_url)
+        return _execute_rest_request(url=self.prefix_url, auth=self.auth, verify=self.verify)
 
     def backpressure(self):
         """
@@ -248,7 +248,7 @@ class JobVertexClient:
         dict
             Backpressure information
         """
-        return _execute_rest_request(url=f"{self.prefix_url}/backpressure")
+        return _execute_rest_request(url=f"{self.prefix_url}/backpressure", auth=self.auth, verify=self.verify)
 
     def metric_names(self):
         """
@@ -261,7 +261,7 @@ class JobVertexClient:
         """
         return [
             elem["id"]
-            for elem in _execute_rest_request(url=f"{self.prefix_url}/metrics")
+            for elem in _execute_rest_request(url=f"{self.prefix_url}/metrics", auth=self.auth, verify=self.verify)
         ]
 
     def metrics(self, metric_names=None):
@@ -280,7 +280,7 @@ class JobVertexClient:
 
         params = {"get": ",".join(metric_names)}
         query_result = _execute_rest_request(
-            url=f"{self.prefix_url}/metrics", params=params
+            url=f"{self.prefix_url}/metrics", params=params, auth=self.auth, verify=self.verify
         )
         result = {}
         for elem in query_result:
@@ -299,7 +299,7 @@ class JobVertexClient:
         dict
             Time-related information for all subtasks
         """
-        return _execute_rest_request(url=f"{self.prefix_url}/subtasktimes")
+        return _execute_rest_request(url=f"{self.prefix_url}/subtasktimes", auth=self.auth, verify=self.verify)
 
     def taskmanagers(self):
         """
@@ -312,7 +312,7 @@ class JobVertexClient:
         dict
             Task information aggregated by task manager.
         """
-        return _execute_rest_request(url=f"{self.prefix_url}/taskmanagers")
+        return _execute_rest_request(url=f"{self.prefix_url}/taskmanagers", auth=self.auth, verify=self.verify)
 
     def watermarks(self):
         """
@@ -325,7 +325,7 @@ class JobVertexClient:
         list
             Watermarks for all subtasks of a task.
         """
-        return _execute_rest_request(url=f"{self.prefix_url}/watermarks")
+        return _execute_rest_request(url=f"{self.prefix_url}/watermarks", auth=self.auth, verify=self.verify)
 
 
 class JobsClient:
@@ -351,7 +351,7 @@ class JobsClient:
         list
             List of jobs and their current state.
         """
-        return _execute_rest_request(url=self.prefix)["jobs"]
+        return _execute_rest_request(url=self.prefix, auth=self.auth, verify=self.verify)["jobs"]
 
     def job_ids(self):
         """
@@ -375,7 +375,7 @@ class JobsClient:
         list
             List of existing jobs.
         """
-        return _execute_rest_request(url=f"{self.prefix}/overview")["jobs"]
+        return _execute_rest_request(url=f"{self.prefix}/overview", auth=self.auth, verify=self.verify)["jobs"]
 
     def metric_names(self):
         """
@@ -387,7 +387,7 @@ class JobsClient:
             List of metric names.
         """
         return [
-            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics")
+            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics", auth=self.auth, verify=self.verify)
         ]
 
     def metrics(self, metric_names=None, agg_modes=None, job_ids=None):
@@ -436,7 +436,7 @@ class JobsClient:
             "jobs": ",".join(job_ids),
         }
         query_result = _execute_rest_request(
-            url=f"{self.prefix}/metrics", params=params
+            url=f"{self.prefix}/metrics", params=params, auth=self.auth, verify=self.verify
         )
 
         result = {}
@@ -462,7 +462,7 @@ class JobsClient:
         dict
             Details of the selected job.
         """
-        return _execute_rest_request(url=f"{self.prefix}/{job_id}")
+        return _execute_rest_request(url=f"{self.prefix}/{job_id}", auth=self.auth, verify=self.verify)
 
     def get_config(self, job_id):
         """
@@ -480,7 +480,7 @@ class JobsClient:
         dict
             Job configuration
         """
-        return _execute_rest_request(url=f"{self.prefix}/{job_id}/config")
+        return _execute_rest_request(url=f"{self.prefix}/{job_id}/config", auth=self.auth, verify=self.verify)
 
     def get_exceptions(self, job_id):
         """
@@ -498,7 +498,7 @@ class JobsClient:
         dict
             The most recent exceptions.
         """
-        return _execute_rest_request(url=f"{self.prefix}/{job_id}/exceptions")
+        return _execute_rest_request(url=f"{self.prefix}/{job_id}/exceptions", auth=self.auth, verify=self.verify)
 
     def get_execution_result(self, job_id):
         """
@@ -517,7 +517,7 @@ class JobsClient:
         dict
             The execution result of the selected job.
         """
-        return _execute_rest_request(url=f"{self.prefix}/{job_id}/execution-result")
+        return _execute_rest_request(url=f"{self.prefix}/{job_id}/execution-result", auth=self.auth, verify=self.verify)
 
     def get_metrics(self, job_id, metric_names=None):
         """
@@ -542,7 +542,7 @@ class JobsClient:
             metric_names = self.metric_names()
         params = {"get": ",".join(metric_names)}
         query_result = _execute_rest_request(
-            url=f"{self.prefix}/{job_id}/metrics", params=params
+            url=f"{self.prefix}/{job_id}/metrics", params=params, auth=self.auth, verify=self.verify
         )
         return dict([(elem["id"], elem["value"]) for elem in query_result])
 
@@ -562,7 +562,7 @@ class JobsClient:
         dict
             Dataflow plan
         """
-        return _execute_rest_request(url=f"{self.prefix}/{job_id}/plan")["plan"]
+        return _execute_rest_request(url=f"{self.prefix}/{job_id}/plan", auth=self.auth, verify=self.verify)["plan"]
 
     def get_vertex_ids(self, job_id):
         """
@@ -608,7 +608,7 @@ class JobsClient:
             )
 
         return _execute_rest_request(
-            url=f"{self.prefix}/{job_id}/accumulators", http_method="GET", params=params
+            url=f"{self.prefix}/{job_id}/accumulators", http_method="GET", params=params, auth=self.auth, verify=self.verify
         )
 
     def get_checkpointing_configuration(self, job_id):
@@ -628,7 +628,7 @@ class JobsClient:
             Checkpointing configuration of the selected job.
         """
         return _execute_rest_request(
-            url=f"{self.prefix}/{job_id}/checkpoints/config", http_method="GET"
+            url=f"{self.prefix}/{job_id}/checkpoints/config", http_method="GET", auth=self.auth, verify=self.verify
         )
 
     def get_checkpoints(self, job_id):
@@ -648,7 +648,7 @@ class JobsClient:
             Checkpointing statistics for the selected job: counts, summary, latest and history.
         """
         return _execute_rest_request(
-            url=f"{self.prefix}/{job_id}/checkpoints", http_method="GET"
+            url=f"{self.prefix}/{job_id}/checkpoints", http_method="GET", auth=self.auth, verify=self.verify
         )
 
     def get_checkpoint_ids(self, job_id):
@@ -695,6 +695,8 @@ class JobsClient:
         checkpoint_details = _execute_rest_request(
             url=f"{self.prefix}/{job_id}/checkpoints/details/{checkpoint_id}",
             http_method="GET",
+            auth=self.auth,
+            verify=self.verify,
         )
         if not show_subtasks:
             return checkpoint_details
@@ -704,6 +706,8 @@ class JobsClient:
             subtasks[vertex_id] = _execute_rest_request(
                 url=f"{self.prefix}/{job_id}/checkpoints/details/{checkpoint_id}/subtasks/{vertex_id}",
                 http_method="GET",
+                auth=self.auth,
+                verify=self.verify,
             )
         checkpoint_details["subtasks"] = subtasks
         return checkpoint_details
@@ -733,7 +737,7 @@ class JobsClient:
         """
         params = {"parallelism": parallelism}
         trigger_id = _execute_rest_request(
-            url=f"{self.prefix}/{job_id}/rescaling", http_method="PATCH", params=params
+            url=f"{self.prefix}/{job_id}/rescaling", http_method="PATCH", params=params, auth=self.auth, verify=self.verify
         )["triggerid"]
         return JobTrigger(self.prefix, "rescaling", job_id, trigger_id)
 
@@ -768,6 +772,8 @@ class JobsClient:
             http_method="POST",
             accepted_status_code=202,
             json={"cancel-job": cancel_job, "target-directory": target_directory},
+            auth=self.auth,
+            verify=self.verify,
         )["request-id"]
         return JobTrigger(self.prefix, "savepoints", job_id, trigger_id)
 
@@ -788,7 +794,7 @@ class JobsClient:
             True if the job has been canceled, otherwise False.
         """
         res = _execute_rest_request(
-            url=f"{self.prefix}/{job_id}", http_method="PATCH", accepted_status_code=202
+            url=f"{self.prefix}/{job_id}", http_method="PATCH", accepted_status_code=202, auth=self.auth, verify=self.verify
         )
         if len(res) < 1:
             return True
@@ -833,6 +839,8 @@ class JobsClient:
             http_method="POST",
             accepted_status_code=202,
             json=data,
+            auth=self.auth,
+            verify=self.verify,
         )["request-id"]
         return JobTrigger(self.prefix, "savepoints", job_id, trigger_id)
 

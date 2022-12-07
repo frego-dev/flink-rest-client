@@ -31,19 +31,19 @@ class FlinkRestClientV1:
 
     @property
     def jobmanager(self):
-        return JobmanagerClient(prefix=self.api_url)
+        return JobmanagerClient(prefix=self.api_url, auth=self.auth, verify=self.verify)
 
     @property
     def taskmanagers(self):
-        return TaskManagersClient(prefix=self.api_url)
+        return TaskManagersClient(prefix=self.api_url, auth=self.auth, verify=self.verify)
 
     @property
     def jars(self):
-        return JarsClient(prefix=self.api_url)
+        return JarsClient(prefix=self.api_url, auth=self.auth, verify=self.verify)
 
     @property
     def jobs(self):
-        return JobsClient(prefix=self.api_url)
+        return JobsClient(prefix=self.api_url, auth=self.auth, verify=self.verify)
 
     def overview(self):
         """
