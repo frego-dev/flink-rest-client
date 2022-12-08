@@ -134,7 +134,7 @@ class JarsClient:
         if arguments is not None:
             data["programArgs"] = " ".join([f"--{k} {v}" for k, v in arguments.items()])
         if entry_class is not None:
-            data["entry-class"] = entry_class
+            data["entryClass"] = entry_class
         if parallelism is not None:
             if parallelism < 0:
                 raise RestException(
