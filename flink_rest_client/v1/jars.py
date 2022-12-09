@@ -261,3 +261,27 @@ class JarsClient:
             if len(res.keys()) > 1:
                 return False
         return True
+
+    def get_last_jar_id_from_name(self, jar_name):
+        """"
+        Get the id from the last uploaded jar by the name of the jar.
+
+        """
+        jars_list = self.all().get("files")
+        for jar_element in jars_list:
+            if jar_element.get("name") == jar_name:
+                return jar_element.get("id")
+            else:
+                return None
+
+    def delete_all_by_name(self, jar_name):
+        """"
+        Delete all jars by the name of the jar.
+
+        """
+        jars_list = self.all().get("files")
+        for jar_element in jars_list:
+            if jar_element.get("name") == jar_name:
+                self.delete(jar_element.get("id"))
+
+
