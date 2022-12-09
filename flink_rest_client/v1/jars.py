@@ -87,6 +87,7 @@ class JarsClient:
         self,
         jar_id,
         arguments=None,
+        arguments_file=None,
         entry_class=None,
         parallelism=None,
         savepoint_path=None,
@@ -133,6 +134,8 @@ class JarsClient:
         data = {}
         if arguments is not None:
             data["programArgs"] = " ".join([f"--{k} {v}" for k, v in arguments.items()])
+        if arguments_file is not None:
+            data["programArgs"] = arguments_file
         if entry_class is not None:
             data["entryClass"] = entry_class
         if parallelism is not None:
