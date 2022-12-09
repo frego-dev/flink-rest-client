@@ -107,6 +107,9 @@ class JarsClient:
         arguments: dict
             (Optional) Dict of program arguments.
 
+        arguments_file: str
+            (Optional) path to file containing the program arguments.
+
         entry_class: str
             (Optional) String value that specifies the fully qualified name of the entry point class. Overrides the
             class defined in the jar file manifest.
