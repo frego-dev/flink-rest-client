@@ -5,7 +5,7 @@ from flink_rest_client.common import _execute_rest_request, RestException
 
 
 class JarsClient:
-    def __init__(self, prefix):
+    def __init__(self, prefix, auth, verify):
         """
         Constructor.
 
@@ -15,6 +15,8 @@ class JarsClient:
             REST API url prefix. It must contain the host, port pair.
         """
         self.prefix = f"{prefix}/jars"
+        self.auth = auth
+        self.verify = verify
 
     def all(self):
         """
@@ -27,7 +29,7 @@ class JarsClient:
         dict
             List all the jars were previously uploaded.
         """
-        return _execute_rest_request(url=self.prefix)
+        return _execute_rest_request(url=self.prefix, auth=self.auth, verify=self.verify)
 
     def upload(self, path_to_jar):
         """
@@ -51,7 +53,7 @@ class JarsClient:
             "file": (filename, (open(path_to_jar, "rb")), "application/x-java-archive")
         }
         return _execute_rest_request(
-            url=f"{self.prefix}/upload", http_method="POST", files=files
+            url=f"{self.prefix}/upload", http_method="POST", files=files, auth=self.auth, verify=self.verify
         )
 
     def get_plan(self, jar_id):
@@ -77,13 +79,14 @@ class JarsClient:
             If the jar_id does not exist.
         """
         return _execute_rest_request(
-            url=f"{self.prefix}/{jar_id}/plan", http_method="POST"
+            url=f"{self.prefix}/{jar_id}/plan", http_method="POST", auth=self.auth, verify=self.verify
         )["plan"]
 
     def run(
         self,
         jar_id,
         arguments=None,
+        arguments_file=None,
         entry_class=None,
         parallelism=None,
         savepoint_path=None,
@@ -102,6 +105,9 @@ class JarsClient:
 
         arguments: dict
             (Optional) Dict of program arguments.
+
+        arguments_file: str
+            (Optional) path to a file containing the program arguments.
 
         entry_class: str
             (Optional) String value that specifies the fully qualified name of the entry point class. Overrides the
@@ -130,8 +136,10 @@ class JarsClient:
         data = {}
         if arguments is not None:
             data["programArgs"] = " ".join([f"--{k} {v}" for k, v in arguments.items()])
+        if arguments_file is not None:
+            data["programArgs"] = arguments_file
         if entry_class is not None:
-            data["entry-class"] = entry_class
+            data["entryClass"] = entry_class
         if parallelism is not None:
             if parallelism < 0:
                 raise RestException(
@@ -144,7 +152,7 @@ class JarsClient:
             data["allowNonRestoredState"] = allow_non_restored_state
 
         return _execute_rest_request(
-            url=f"{self.prefix}/{jar_id}/run", http_method="POST", json=data
+            url=f"{self.prefix}/{jar_id}/run", http_method="POST", json=data, auth=self.auth, verify=self.verify
         )["jobid"]
 
     def upload_and_run(
@@ -226,8 +234,65 @@ class JarsClient:
         RestException
             If the jar_id does not exist.
         """
-        res = _execute_rest_request(url=f"{self.prefix}/{jar_id}", http_method="DELETE")
+        res = _execute_rest_request(url=f"{self.prefix}/{jar_id}", http_method="DELETE",
+                                    auth=self.auth, verify=self.verify)
         if len(res.keys()) < 1:
             return True
         else:
             return False
+
+    def delete_all(self):
+        """
+        Deletes all jars previously uploaded via '/jars/upload'.
+
+        Endpoint: [DELETE] /jars/:jarid
+
+        Returns
+        -------
+        bool
+        True, if all jars has been successfully deleted, otherwise False.
+        """
+        jars_list = self.all().get("files")
+        for jar_element in jars_list:
+            jar_id = jar_element.get("id")
+            res = _execute_rest_request(url=f"{self.prefix}/{jar_id}", http_method="DELETE", auth=self.auth,
+                                        verify=self.verify)
+            if len(res.keys()) > 1:
+                return False
+        return True
+
+    def get_last_jar_id_from_name(self, jar_name):
+        """
+        Get the id from the last uploaded jar by the name of the jar.
+
+        Endpoint: [GET] /jars
+
+        Returns
+        -------
+        id
+        Id of the last uploaded jar with the requested name.
+
+        """
+        jars_list = self.all().get("files")
+        for jar_element in jars_list:
+            if jar_element.get("name") == jar_name:
+                return jar_element.get("id")
+            else:
+                return None
+
+    def delete_all_by_name(self, jar_name):
+        """
+        Delete all jars by the name of the jar
+
+        Endpoint: [DELETE] /jars/:jarid
+
+        Returns
+        -------
+        bool
+        True, if all jars has been successfully deleted, otherwise False.
+
+        """
+        jars_list = self.all().get("files")
+        for jar_element in jars_list:
+            if jar_element.get("name") == jar_name:
+                self.delete(jar_element.get("id"))

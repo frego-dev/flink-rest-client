@@ -2,7 +2,7 @@ from flink_rest_client.common import _execute_rest_request, RestException
 
 
 class TaskManagersClient:
-    def __init__(self, prefix):
+    def __init__(self, prefix, auth, verify):
         """
         Constructor.
 
@@ -12,6 +12,8 @@ class TaskManagersClient:
             REST API url prefix. It must contain the host, port pair.
         """
         self.prefix = f"{prefix}/taskmanagers"
+        self.auth = auth
+        self.verify = verify
 
     def all(self):
         """
@@ -24,7 +26,7 @@ class TaskManagersClient:
         list
             List of taskmanagers. Each taskmanager is represented by a dictionary.
         """
-        return _execute_rest_request(url=self.prefix)["taskmanagers"]
+        return _execute_rest_request(url=self.prefix, auth=self.auth, verify=self.verify)["taskmanagers"]
 
     def taskmanager_ids(self):
         """
@@ -47,7 +49,8 @@ class TaskManagersClient:
             List of metric names.
         """
         return [
-            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics")
+            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics",
+                                                         auth=self.auth, verify=self.verify)
         ]
 
     def metrics(self, metric_names=None, agg_modes=None, taskmanager_ids=None):
@@ -97,7 +100,7 @@ class TaskManagersClient:
             "taskmanagers": ",".join(taskmanager_ids),
         }
         query_result = _execute_rest_request(
-            url=f"{self.prefix}/metrics", params=params
+            url=f"{self.prefix}/metrics", params=params, auth=self.auth, verify=self.verify
         )
 
         result = {}
@@ -123,7 +126,7 @@ class TaskManagersClient:
         dict
             Query result as a dict.
         """
-        return _execute_rest_request(url=f"{self.prefix}/{taskmanager_id}")
+        return _execute_rest_request(url=f"{self.prefix}/{taskmanager_id}", auth=self.auth, verify=self.verify)
 
     def get_logs(self, taskmanager_id):
         """
@@ -141,7 +144,8 @@ class TaskManagersClient:
         list
             List of log files in which each element contains a name and size fields.
         """
-        return _execute_rest_request(url=f"{self.prefix}/{taskmanager_id}/logs")["logs"]
+        return _execute_rest_request(url=f"{self.prefix}/{taskmanager_id}/logs",
+                                     auth=self.auth, verify=self.verify)["logs"]
 
     def get_metrics(self, taskmanager_id, metric_names=None):
         """
@@ -168,7 +172,7 @@ class TaskManagersClient:
         params = {"get": ",".join(metric_names)}
 
         query_result = _execute_rest_request(
-            url=f"{self.prefix}/{taskmanager_id}/metrics", params=params
+            url=f"{self.prefix}/{taskmanager_id}/metrics", params=params, auth=self.auth, verify=self.verify
         )
         return dict([(elem["id"], elem["value"]) for elem in query_result])
 
@@ -189,7 +193,7 @@ class TaskManagersClient:
             ThreadName -> StringifiedThreadInfo key-value pairs.
         """
         query_result = _execute_rest_request(
-            url=f"{self.prefix}/{taskmanager_id}/thread-dump"
+            url=f"{self.prefix}/{taskmanager_id}/thread-dump", auth=self.auth, verify=self.verify
         )["threadInfos"]
         return dict(
             [
