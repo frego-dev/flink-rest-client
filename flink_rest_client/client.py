@@ -18,9 +18,10 @@ class FlinkRestClient:
             Port number. Default value: 8081
         version: str
             Version of the REST API. Default value: v1
-        version
         auth: array
+            Authentication if a reverse proxy sits in front of the API
         verify: Boolean
+            Check SSL certificate. Default is true
         """
         port = 8081 if port is None else port
         version = "v1" if version is None else version

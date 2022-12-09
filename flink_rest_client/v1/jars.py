@@ -235,8 +235,29 @@ class JarsClient:
         RestException
             If the jar_id does not exist.
         """
-        res = _execute_rest_request(url=f"{self.prefix}/{jar_id}", http_method="DELETE", auth=self.auth, verify=self.verify)
+        res = _execute_rest_request(url=f"{self.prefix}/{jar_id}", http_method="DELETE",
+                                    auth=self.auth, verify=self.verify)
         if len(res.keys()) < 1:
             return True
         else:
             return False
+
+    def delete_all(self):
+        """
+        Deletes all jars previously uploaded via '/jars/upload'.
+
+        Endpoint: [DELETE] /jars/:jarid
+
+        Returns
+        -------
+        bool
+        True, if all jars has been successfully deleted, otherwise False.
+        """
+        jars_list = self.all().get("files")
+        for jar_element in jars_list:
+            jar_id = jar_element.get("id")
+            res = _execute_rest_request(url=f"{self.prefix}/{jar_id}", http_method="DELETE", auth=self.auth,
+                                        verify=self.verify)
+            if len(res.keys()) > 1:
+                return False
+        return True

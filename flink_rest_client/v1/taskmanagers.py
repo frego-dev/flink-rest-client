@@ -49,7 +49,8 @@ class TaskManagersClient:
             List of metric names.
         """
         return [
-            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics", auth=self.auth, verify=self.verify)
+            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics",
+                                                         auth=self.auth, verify=self.verify)
         ]
 
     def metrics(self, metric_names=None, agg_modes=None, taskmanager_ids=None):
@@ -143,7 +144,8 @@ class TaskManagersClient:
         list
             List of log files in which each element contains a name and size fields.
         """
-        return _execute_rest_request(url=f"{self.prefix}/{taskmanager_id}/logs", auth=self.auth, verify=self.verify)["logs"]
+        return _execute_rest_request(url=f"{self.prefix}/{taskmanager_id}/logs",
+                                     auth=self.auth, verify=self.verify)["logs"]
 
     def get_metrics(self, taskmanager_id, metric_names=None):
         """

@@ -81,7 +81,8 @@ class JobmanagerClient:
             List of metric names.
         """
         return [
-            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics", auth=self.auth, verify=self.verify)
+            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics",
+                                                         auth=self.auth, verify=self.verify)
         ]
 
     def metrics(self):

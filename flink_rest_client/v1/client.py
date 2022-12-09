@@ -69,7 +69,8 @@ class FlinkRestClientV1:
         dict
             Query result as a dict.
         """
-        return _execute_rest_request(url=f"{self.api_url}/config", http_method="GET", auth=self.auth, verify=self.verify)
+        return _execute_rest_request(url=f"{self.api_url}/config", http_method="GET",
+                                     auth=self.auth, verify=self.verify)
 
     def delete_cluster(self):
         """
@@ -97,7 +98,8 @@ class FlinkRestClientV1:
         list
             Query result as a list of datasets.
         """
-        return _execute_rest_request(url=f"{self.api_url}/datasets", http_method="GET", auth=self.auth, verify=self.verify)[
+        return _execute_rest_request(url=f"{self.api_url}/datasets", http_method="GET",
+                                     auth=self.auth, verify=self.verify)[
             "dataSets"
         ]
 

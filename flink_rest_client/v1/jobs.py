@@ -198,7 +198,8 @@ class JobVertexSubtaskClient:
         if attempt_id is None:
             attempt_id = self.get(subtask_id)["attempt"]
         return _execute_rest_request(
-            url=f"{self.prefix_url}/{subtask_id}/attempts/{attempt_id}/accumulators", auth=self.auth, verify=self.verify
+            url=f"{self.prefix_url}/{subtask_id}/attempts/{attempt_id}/accumulators",
+            auth=self.auth, verify=self.verify
         )
 
 
