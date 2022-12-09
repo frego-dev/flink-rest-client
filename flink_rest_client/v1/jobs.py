@@ -225,7 +225,7 @@ class JobVertexClient:
 
     @property
     def subtasks(self):
-        return JobVertexSubtaskClient(self.prefix_url)
+        return JobVertexSubtaskClient(self.prefix_url, self.auth, self.verify)
 
     def details(self):
         """
@@ -398,9 +398,8 @@ class JobsClient:
         for job in job_list:
             job_id = job.get("jid")
             job_state = job.get("state")
-            if (job.get("name") == job_name and (job_state == "RUNNING" or job_state == "RESTARTING")):
+            if job.get("name") == job_name and (job_state == "RUNNING" or job_state == "RESTARTING"):
                 self.terminate(job_id)
-
 
     def metric_names(self):
         """
@@ -412,7 +411,8 @@ class JobsClient:
             List of metric names.
         """
         return [
-            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics", auth=self.auth, verify=self.verify)
+            elem["id"] for elem in _execute_rest_request(url=f"{self.prefix}/metrics",
+                                                         auth=self.auth, verify=self.verify)
         ]
 
     def metrics(self, metric_names=None, agg_modes=None, job_ids=None):
@@ -633,7 +633,8 @@ class JobsClient:
             )
 
         return _execute_rest_request(
-            url=f"{self.prefix}/{job_id}/accumulators", http_method="GET", params=params, auth=self.auth, verify=self.verify
+            url=f"{self.prefix}/{job_id}/accumulators", http_method="GET", params=params,
+            auth=self.auth, verify=self.verify
         )
 
     def get_checkpointing_configuration(self, job_id):
@@ -762,9 +763,10 @@ class JobsClient:
         """
         params = {"parallelism": parallelism}
         trigger_id = _execute_rest_request(
-            url=f"{self.prefix}/{job_id}/rescaling", http_method="PATCH", params=params, auth=self.auth, verify=self.verify
+            url=f"{self.prefix}/{job_id}/rescaling", http_method="PATCH", params=params,
+            auth=self.auth, verify=self.verify
         )["triggerid"]
-        return JobTrigger(self.prefix, "rescaling", job_id, trigger_id)
+        return JobTrigger(self.prefix, "rescaling", job_id, trigger_id, self.auth, self.verify)
 
     def create_savepoint(self, job_id, target_directory, cancel_job=False):
         """
@@ -800,7 +802,7 @@ class JobsClient:
             auth=self.auth,
             verify=self.verify,
         )["request-id"]
-        return JobTrigger(self.prefix, "savepoints", job_id, trigger_id)
+        return JobTrigger(self.prefix, "savepoints", job_id, trigger_id, self.auth, self.verify)
 
     def terminate(self, job_id):
         """
@@ -819,7 +821,8 @@ class JobsClient:
             True if the job has been canceled, otherwise False.
         """
         res = _execute_rest_request(
-            url=f"{self.prefix}/{job_id}", http_method="PATCH", accepted_status_code=202, auth=self.auth, verify=self.verify
+            url=f"{self.prefix}/{job_id}", http_method="PATCH", accepted_status_code=202,
+            auth=self.auth, verify=self.verify
         )
         if len(res) < 1:
             return True
@@ -867,7 +870,7 @@ class JobsClient:
             auth=self.auth,
             verify=self.verify,
         )["request-id"]
-        return JobTrigger(self.prefix, "savepoints", job_id, trigger_id)
+        return JobTrigger(self.prefix, "savepoints", job_id, trigger_id, self.auth, self.verify)
 
     def get_vertex(self, job_id, vertex_id):
         """
@@ -885,4 +888,4 @@ class JobsClient:
         JobVertexClient
             JobVertexClient instance that can execute vertex related queries.
         """
-        return JobVertexClient(self.prefix, job_id, vertex_id)
+        return JobVertexClient(self.prefix, job_id, vertex_id, self.auth, self.verify)

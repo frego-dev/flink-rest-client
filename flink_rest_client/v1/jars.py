@@ -18,7 +18,6 @@ class JarsClient:
         self.auth = auth
         self.verify = verify
 
-
     def all(self):
         """
         Returns a list of all jars previously uploaded via '/jars/upload'.
@@ -108,7 +107,7 @@ class JarsClient:
             (Optional) Dict of program arguments.
 
         arguments_file: str
-            (Optional) path to file containing the program arguments.
+            (Optional) path to a file containing the program arguments.
 
         entry_class: str
             (Optional) String value that specifies the fully qualified name of the entry point class. Overrides the
@@ -263,8 +262,15 @@ class JarsClient:
         return True
 
     def get_last_jar_id_from_name(self, jar_name):
-        """"
+        """
         Get the id from the last uploaded jar by the name of the jar.
+
+        Endpoint: [GET] /jars
+
+        Returns
+        -------
+        id
+        Id of the last uploaded jar with the requested name.
 
         """
         jars_list = self.all().get("files")
@@ -275,13 +281,18 @@ class JarsClient:
                 return None
 
     def delete_all_by_name(self, jar_name):
-        """"
-        Delete all jars by the name of the jar.
+        """
+        Delete all jars by the name of the jar
+
+        Endpoint: [DELETE] /jars/:jarid
+
+        Returns
+        -------
+        bool
+        True, if all jars has been successfully deleted, otherwise False.
 
         """
         jars_list = self.all().get("files")
         for jar_element in jars_list:
             if jar_element.get("name") == jar_name:
                 self.delete(jar_element.get("id"))
-
-
