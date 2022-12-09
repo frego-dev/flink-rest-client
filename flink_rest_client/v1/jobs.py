@@ -386,6 +386,22 @@ class JobsClient:
         """
         return _execute_rest_request(url=f"{self.prefix}/overview", auth=self.auth, verify=self.verify)["jobs"]
 
+    def delete_by_name(self, job_name):
+        """
+        Delete all the jobs by name that are in stare RUNNING or RESTARTING
+
+        Returns
+        -------
+        True if successfull, False if don't
+        """
+        job_list = self.overview()
+        for job in job_list:
+            job_id = job.get("jid")
+            job_state = job.get("state")
+            if (job.get("name") == job_name and (job_state == "RUNNING" or job_state == "RESTARTING")):
+                self.terminate(job_id)
+
+
     def metric_names(self):
         """
         Returns the supported metric names.
